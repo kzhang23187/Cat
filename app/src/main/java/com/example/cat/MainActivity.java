@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity{
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                //moveTiles(board, 1);
+                moveTiles(board, 1);
                 addTile(0,1,0);
 
 
@@ -109,10 +109,6 @@ public class MainActivity extends AppCompatActivity{
     void moveTiles(TextView[][] board, int direction) {
 
         //1: up 2: down 3: right 4: left
-        //copies layout of the current app
-        final ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout);
-
-
         //if direction is up
         if (direction == 1) {
 
@@ -130,7 +126,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveVerticle(single, null, 0);
+                    moveVertical(single, null, 0, j);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -144,19 +140,15 @@ public class MainActivity extends AppCompatActivity{
 
                 } else if (board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
 
-                    combineVertical(board[1][j], board[2][j], 2, j);
-
-                } else if (board[0][j] != null && board[1][j] != null && !board[0][j].getText().equals(board[1][j].getText())) {
-
-                    moveVertical(board[0][j], board[1][j], 2, j);
+                    combineVertical(board[1][j], board[2][j], 2, j); //have to check if above is null or not
 
                 } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
 
-                    moveVertical(board[0][j], board[2][j], 3, j);
+                    moveVertical(board[0][j], board[2][j], 2, j);
 
                 } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
 
-                    moveVertical(board[1][j], board[2][j], 4, j);
+                    moveVertical(board[1][j], board[2][j], 3, j);
 
                 }
 
@@ -196,17 +188,13 @@ public class MainActivity extends AppCompatActivity{
 
                     combineVertical(board[1][j], board[0][j], 5, j);
 
-                } else if (board[0][j] != null && board[1][j] != null && !board[0][j].getText().equals(board[1][j].getText())) {
-
-                    moveVertical(board[0][j], board[1][j], 5, j);
-
                 } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
 
-                    moveVertical(board[0][j], board[2][j], 6, j);
+                    moveVertical(board[0][j], board[2][j], 4, j);
 
                 } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
 
-                    moveVertical(board[1][j], board[2][j], 7, j);
+                    moveVertical(board[1][j], board[2][j], 5, j);
 
                 }
 
@@ -215,7 +203,7 @@ public class MainActivity extends AppCompatActivity{
         //if direction is to the right
         if (direction == 3) {
 
-            //determines what kind of vertical combination should be performed
+            //determines what kind of horizontal combination should be performed
             for (int i = 0; i < board.length; i++) {
                 //checks for single element
                 int count = 0;
@@ -229,7 +217,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveRight(single);
+                    moveHorizontal(single, null, 0, i);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -253,7 +241,7 @@ public class MainActivity extends AppCompatActivity{
         if (direction == 4) {
 
 
-            //determines what kind of vertical combination should be performed
+            //determines what kind of horizontal combination should be performed
             for (int i = 0; i < board.length; i++) {
                 //checks for single element
                 int count = 0;
@@ -267,7 +255,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveLeft(single);
+                    moveHorizontal(single, null, 1, i);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -552,62 +540,46 @@ public class MainActivity extends AppCompatActivity{
      *
      * @param tile1
      * @param tile2
-     * @param type 0: single element moving up 1: single element moving down. Rest are the same as combineVertical but with the tiles not equal
+     * @param type 0: single element moving up 1: single element moving down. 2: top/bottom 3: middle/bottom
      * @param col
      */
     void moveVertical(TextView tile1, TextView tile2, int type, int col) {
-        if (tile2 == null) {
-            //single element moving up or down
-            if (type == 0) {
+        //copies the layout of the app
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
 
-            } else {
 
+        newSet.clone(layout);
+        TextView single = null;
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][col] != null) {
+                single = board[i][col];
+                break;
             }
         }
-        if (col == 0) {
-            if (type == 2) {
+        if (type == 0) {
+            newSet.clear(single.getId(), ConstraintSet.TOP);
+            newSet.connect(single.getId(), ConstraintSet.TOP,
+                    R.id.guideline, ConstraintSet.BOTTOM);
+        } else if (type == 1){
+            newSet.clear(single.getId(), ConstraintSet.TOP);
+            newSet.connect(single.getId(), ConstraintSet.TOP,
+                    R.id.guideline3, ConstraintSet.BOTTOM);
+        } else if (type == 2) {
+            //top/bottom
+            newSet.clear(tile2.getId(), ConstraintSet.TOP);
+            newSet.connect(single.getId(), ConstraintSet.TOP,
+                    R.id.guideline2, ConstraintSet.BOTTOM);
 
-            } else if (type == 3) {
+        } else if (type == 3) {
 
-            } else if (type == 4) {
+        } else if (type == 4) {
 
-            } else if (type == 5) {
+        } else if (type == 5) {
 
-            } else if (type == 6) {
-
-            } else if (type == 7) {
-
-            }
-
-        } else if (col == 1) {
-            if (type == 2) {
-
-            } else if (type == 3) {
-
-            } else if (type == 4) {
-
-            } else if (type == 5) {
-
-            } else if (type == 6) {
-
-            } else if (type == 7) {
-
-            }
-
-        } else if (col == 2) {
-            if (type == 2) {
-
-            } else if (type == 3) {
-
-            } else if (type == 4) {
-
-            } else if (type == 5) {
-
-            } else if (type == 6) {
-
-            } else if (type == 7) {
-
-            }
+        }
+        TransitionManager.beginDelayedTransition(layout);
+        newSet.applyTo(layout);
 
         }
 
