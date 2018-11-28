@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity{
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                moveTiles(board, 1);
-                addTile(0,0,0);
+                //moveTiles(board, 1);
+                addTile(0,1,0);
 
 
             }
@@ -281,14 +281,15 @@ public class MainActivity extends AppCompatActivity{
         ConstraintSet newSet = new ConstraintSet();
 
         ///Make a new Cat based off old cats
+        //ADD MORE CONDITIONS FOR MORE CATS
         Context mContext = getApplicationContext();
         Drawable drawableCat = null;
         if (catType == 0) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat1);
+            drawableCat.setBounds( 0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight() );
         }
-        //ADD MORE CONDITIONS FOR MORE CATS
         //make new tile
         TextView newTile = new TextView(layout.getContext());
         newTile.setId(View.generateViewId());
@@ -299,15 +300,109 @@ public class MainActivity extends AppCompatActivity{
         ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
         newTile.setLayoutParams(lp);
         layout.addView(newTile);
+
         newSet.clone(layout);
 
-        //connect the new tile to the first guidelines top and right
-        newSet.connect(newTile.getId(), ConstraintSet.TOP,
-                R.id.guideline, ConstraintSet.BOTTOM);
-        newSet.connect(newTile.getId(), ConstraintSet.START,
-                R.id.guideline5, ConstraintSet.END);
+        //determines which position to add tile to
+        if (row == 0) {
+            if (col == 0) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline5, ConstraintSet.END);
 
-        newTile.setVisibility(View.VISIBLE);
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+                board[0][0] = newTile;
+            } else if (col == 1) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline6, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+                board[0][1] = newTile;
+
+            } else if (col == 2) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline7, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+
+            }
+        } else if (row == 1) {
+            if (col == 0) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline5, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+            } else if (col == 1) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline6, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+
+            } else if (col == 2) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline7, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+
+            }
+
+
+        } else if (row == 2) {
+            if (col == 0) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline5, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+            } else if (col == 1) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline6, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+
+            } else if (col == 2) {
+                newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+                newSet.connect(newTile.getId(), ConstraintSet.START,
+                        R.id.guideline7, ConstraintSet.END);
+
+                newSet.applyTo(layout);
+
+                newTile.setVisibility(View.VISIBLE);
+
+            }
+
+        }
 
     }
 
@@ -341,6 +436,17 @@ public class MainActivity extends AppCompatActivity{
 
         if (col == 0) {
             if (type == 0 || type == 1) {
+                addTile(catToAdd, 0, 0);
+
+                newSet.clear(R.id.textView1, ConstraintSet.TOP);
+                newSet.clear(R.id.textView2, ConstraintSet.TOP);
+                newSet.connect(R.id.textView1, ConstraintSet.BOTTOM,
+                        R.id.gdln100, ConstraintSet.BOTTOM);
+                newSet.connect(R.id.textView2, ConstraintSet.BOTTOM,
+                        R.id.gdln100, ConstraintSet.BOTTOM);
+
+                //slows the transition of the tile to the new guideline
+                TransitionManager.beginDelayedTransition(layout);
 
             } else if (type == 2) {
 
