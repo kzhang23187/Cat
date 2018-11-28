@@ -18,6 +18,8 @@ import android.view.MotionEvent;
 import android.support.v4.view.MotionEventCompat;
 import android.view.View.OnTouchListener;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity{
     private int squareSide;
     private int margin;
@@ -111,11 +113,28 @@ public class MainActivity extends AppCompatActivity{
         //gives new tile an id
         newTile.setId(View.generateViewId());
 
+        //IF ONLY ONE ELEMENT IN ROW/COLUMN JUST MOVE IT
+
         //if direction is up
         if (direction == 1) {
 
-            //determines what kind of vertical combination should be performed
+            //determines what kind of vertical combination should be performed or not
             for (int j = 0; j < board[0].length; j++) {
+                //checks for single element
+                int count = 0;
+                TextView single = null;
+                for (int i = 0; i < board.length; i++) {
+                    if (board[i][j] == null) {
+                        count++;
+                    } else {
+                        single = board[i][j];
+                    }
+
+                }
+                if (count == 2) {
+                    moveUp(single);
+                    continue;
+                }
                 //makes sure no null and then determine if equal or not
                 if (board[0][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
 
@@ -131,6 +150,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
 
+
             }
         }
         //if direction is down
@@ -138,6 +158,21 @@ public class MainActivity extends AppCompatActivity{
 
             //determines what kind of vertical combination should be performed
             for (int j = 0; j < board[0].length; j++) {
+                //checks for single element
+                int count = 0;
+                TextView single = null;
+                for (int i = 0; i < board.length; i++) {
+                    if (board[i][j] == null) {
+                        count++;
+                    } else {
+                        single = board[i][j];
+                    }
+
+                }
+                if (count == 2) {
+                    moveDown(single);
+                    continue;
+                }
                 //makes sure no null and then determine if equal or not
                 if (board[2][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
 
@@ -160,6 +195,21 @@ public class MainActivity extends AppCompatActivity{
 
             //determines what kind of vertical combination should be performed
             for (int i = 0; i < board.length; i++) {
+                //checks for single element
+                int count = 0;
+                TextView single = null;
+                for (int j = 0; j < board.length; j++) {
+                    if (board[i][j] == null) {
+                        count++;
+                    } else {
+                        single = board[i][j];
+                    }
+
+                }
+                if (count == 2) {
+                    moveRight(single);
+                    continue;
+                }
                 //makes sure no null and then determine if equal or not
                 if (board[i][0] != null && board[i][1] != null && board[i][0].getText().equals(board[i][1].getText())) {
 
@@ -180,20 +230,36 @@ public class MainActivity extends AppCompatActivity{
         //if direction is to the left
         if (direction == 4) {
 
+
             //determines what kind of vertical combination should be performed
             for (int i = 0; i < board.length; i++) {
+                //checks for single element
+                int count = 0;
+                TextView single = null;
+                for (int j = 0; j < board.length; j++) {
+                    if (board[i][j] == null) {
+                        count++;
+                    } else {
+                        single = board[i][j];
+                    }
+
+                }
+                if (count == 2) {
+                    moveLeft(single);
+                    continue;
+                }
                 //makes sure no null and then determine if equal or not
                 if (board[i][2] != null && board[i][1] != null && board[i][2].getText().equals(board[i][1].getText())) {
 
-                    combineHorizontal(board[i][2], board[i][1], 0);
+                    combineHorizontal(board[i][2], board[i][1], 3);
 
                 } else if (board[i][2] != null && board[i][0] != null && board[i][2].equals(board[i][0].getText())) {
 
-                    combineHorizontal(board[i][2], board[i][0], 1);
+                    combineHorizontal(board[i][2], board[i][0], 4);
 
                 } else if (board[i][1] != null && board[i][0] != null && board[i][1].equals(board[i][0].getText())) {
 
-                    combineHorizontal(board[i][1], board[i][0], 2);
+                    combineHorizontal(board[i][1], board[i][0], 5);
 
                 }
 
@@ -224,27 +290,78 @@ public class MainActivity extends AppCompatActivity{
 
     /**
      * handles the different types of vertical combinations.
-     * 1 (top/middle), 2(top/bottom), 3(middle/bottom) are for up
+     * 0 (top/middle), 1(top/bottom), 2(middle/bottom) are for up
      * 3(bottom/middle), 4(bottom/top), 5(middle/top) are for down
+     * special case for middle/bottom and middle/top (if there is a tile above/below that is present
+     * then it should combine to the middle not all the way
      * @param first
      * @param second
      * @param type
      */
     void combineVertical(TextView first, TextView second, int type) {
+        //first determine what kind of cat it is by getText() and which cat to add into place
+        //determine if it is the special case and execute that piece of code
+        //otherwise put everything to bottom/top
+        String catType = (String) first.getText();
+
+
+        if (type == 0 || type == 1) {
+
+        } else if (type == 2) {
+
+        } else if (type == 3 || type == 4) {
+
+        } else {
+
+        }
+
 
     }
 
     /**
      * handles the different types of horizontal combinations.
-     * 1(right/middle), 2(right/left), 3(middle/left) are for right
+     * 0(right/middle), 1(right/left), 2(middle/left) are for right
      * 3(left, middle), 4(left, right(, 5(middle, right) are for left
      * @param first
      * @param second
      * @param type
      */
     void combineHorizontal(TextView first, TextView second, int type) {
+        if (type == 0 || type == 1) {
+
+        } else if (type == 2) {
+
+        } else if (type == 3 || type == 4) {
+
+        } else {
+
+        }
 
     }
+
+    /**
+     * if column only has one element
+     */
+    void moveUp(TextView tile) {
+
+
+    }
+
+    /**
+     * if column only has one element
+     */
+    void moveDown(TextView tile) {
+
+    }
+
+    void moveRight(TextView tile) {
+
+    }
+
+    void moveLeft(TextView tile) {
+
+    }
+
 
     /**
      * Starts the api call to the cat fact thing and updates text box
