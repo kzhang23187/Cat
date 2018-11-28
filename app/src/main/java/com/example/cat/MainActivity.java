@@ -10,6 +10,9 @@ import android.widget.TextView;
 import 	android.util.TypedValue;
 import android.content.res.Resources;
 import android.support.constraint.ConstraintLayout;
+import android.graphics.drawable.Drawable;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
 import android.transition.Transition;
 import android.transition.AutoTransition;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity{
 
         Resources r = getResources();
 
-        squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
+        squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, r.getDisplayMetrics());
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
         TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(final View view) {
                 moveTiles(board, 1);
+                addTile(0,0,0);
 
 
             }
@@ -108,12 +112,6 @@ public class MainActivity extends AppCompatActivity{
         //copies layout of the current app
         final ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout);
 
-        //makes a newTile
-        TextView newTile = new TextView(layout.getContext());
-        //gives new tile an id
-        newTile.setId(View.generateViewId());
-
-        //IF ONLY ONE ELEMENT IN ROW/COLUMN JUST MOVE IT
 
         //if direction is up
         if (direction == 1) {
@@ -138,15 +136,15 @@ public class MainActivity extends AppCompatActivity{
                 //makes sure no null and then determine if equal or not
                 if (board[0][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
 
-                    combineVertical(board[0][j], board[1][j], 0);
+                    combineVertical(board[0][j], board[1][j], 0, j);
 
                 } else if (board[0][j] != null && board[2][j] != null && board[0][j].equals(board[2][j].getText())) {
 
-                    combineVertical(board[0][j], board[2][j], 1);
+                    combineVertical(board[0][j], board[2][j], 1, j);
 
                 } else if (board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
 
-                    combineVertical(board[1][j], board[2][j], 2);
+                    combineVertical(board[1][j], board[2][j], 2, j);
 
                 }
 
@@ -176,15 +174,15 @@ public class MainActivity extends AppCompatActivity{
                 //makes sure no null and then determine if equal or not
                 if (board[2][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
 
-                    combineVertical(board[2][j], board[1][j], 3);
+                    combineVertical(board[2][j], board[1][j], 3, j);
 
                 } else if (board[2][j] != null && board[0][j] != null && board[0][j].equals(board[2][j].getText())) {
 
-                    combineVertical(board[2][j], board[0][j], 4);
+                    combineVertical(board[2][j], board[0][j], 4, j);
 
                 } else if (board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
 
-                    combineVertical(board[1][j], board[0][j], 5);
+                    combineVertical(board[1][j], board[0][j], 5, j);
 
                 }
 
@@ -213,15 +211,15 @@ public class MainActivity extends AppCompatActivity{
                 //makes sure no null and then determine if equal or not
                 if (board[i][0] != null && board[i][1] != null && board[i][0].getText().equals(board[i][1].getText())) {
 
-                    combineHorizontal(board[i][0], board[i][1], 0);
+                    combineHorizontal(board[i][0], board[i][1], 0, i);
 
                 } else if (board[i][0] != null && board[i][2] != null && board[i][0].equals(board[i][2].getText())) {
 
-                    combineHorizontal(board[i][0], board[i][2], 1);
+                    combineHorizontal(board[i][0], board[i][2], 1, i);
 
                 } else if (board[i][1] != null && board[i][2] != null && board[i][1].equals(board[i][2].getText())) {
 
-                    combineHorizontal(board[i][1], board[i][2], 2);
+                    combineHorizontal(board[i][1], board[i][2], 2, i);
 
                 }
 
@@ -251,15 +249,15 @@ public class MainActivity extends AppCompatActivity{
                 //makes sure no null and then determine if equal or not
                 if (board[i][2] != null && board[i][1] != null && board[i][2].getText().equals(board[i][1].getText())) {
 
-                    combineHorizontal(board[i][2], board[i][1], 3);
+                    combineHorizontal(board[i][2], board[i][1], 3, i);
 
                 } else if (board[i][2] != null && board[i][0] != null && board[i][2].equals(board[i][0].getText())) {
 
-                    combineHorizontal(board[i][2], board[i][0], 4);
+                    combineHorizontal(board[i][2], board[i][0], 4, i);
 
                 } else if (board[i][1] != null && board[i][0] != null && board[i][1].equals(board[i][0].getText())) {
 
-                    combineHorizontal(board[i][1], board[i][0], 5);
+                    combineHorizontal(board[i][1], board[i][0], 5, i);
 
                 }
 
@@ -272,11 +270,44 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * Adds a new tile to the board array and into activity main
-     * @param tile
-     * @param board
+     * Adds a new tile to the board array and into activity main. Called by combine methods
+     * @param catType the type of cat to add
+     * @param row which row to add
+     * @param col which col to add to
      */
-    void addTile(TextView tile, TextView[][] board) {
+    void addTile(int catType, int row, int col) {
+        //copies the layout of the app
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
+
+        ///Make a new Cat based off old cats
+        Context mContext = getApplicationContext();
+        Drawable drawableCat = null;
+        if (catType == 0) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat1);
+        }
+        //ADD MORE CONDITIONS FOR MORE CATS
+        //make new tile
+        TextView newTile = new TextView(layout.getContext());
+        newTile.setId(View.generateViewId());
+        newTile.setCompoundDrawables(drawableCat, null, null, null);
+        newTile.setVisibility(View.INVISIBLE);
+        newTile.setGravity(Gravity.CENTER);
+
+        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
+        newTile.setLayoutParams(lp);
+        layout.addView(newTile);
+        newSet.clone(layout);
+
+        //connect the new tile to the first guidelines top and right
+        newSet.connect(newTile.getId(), ConstraintSet.TOP,
+                R.id.guideline, ConstraintSet.BOTTOM);
+        newSet.connect(newTile.getId(), ConstraintSet.START,
+                R.id.guideline5, ConstraintSet.END);
+
+        newTile.setVisibility(View.VISIBLE);
 
     }
 
@@ -289,7 +320,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * handles the different types of vertical combinations.
+     * handles the different types of vertical combinations. and calls updateScore
      * 0 (top/middle), 1(top/bottom), 2(middle/bottom) are for up
      * 3(bottom/middle), 4(bottom/top), 5(middle/top) are for down
      * special case for middle/bottom and middle/top (if there is a tile above/below that is present
@@ -297,25 +328,52 @@ public class MainActivity extends AppCompatActivity{
      * @param first
      * @param second
      * @param type
+     * @param col which column is being combined (0: right, 1: middle, 2: left)
      */
-    void combineVertical(TextView first, TextView second, int type) {
+    void combineVertical(TextView first, TextView second, int type, int col) {
         //first determine what kind of cat it is by getText() and which cat to add into place
         //determine if it is the special case and execute that piece of code
         //otherwise put everything to bottom/top
+
         String catType = (String) first.getText();
+        int catToAdd = Integer.parseInt(catType) + 1; //pass this into add
 
 
-        if (type == 0 || type == 1) {
+        if (col == 0) {
+            if (type == 0 || type == 1) {
 
-        } else if (type == 2) {
+            } else if (type == 2) {
 
-        } else if (type == 3 || type == 4) {
+            } else if (type == 3 || type == 4) {
 
-        } else {
+            } else {
+
+            }
+
+
+        } else if (col == 1) {
+            if (type == 0 || type == 1) {
+
+            } else if (type == 2) {
+
+            } else if (type == 3 || type == 4) {
+
+            } else {
+
+            }
+
+        } else if (col == 2) {
+            if (type == 0 || type == 1) {
+
+            } else if (type == 2) {
+
+            } else if (type == 3 || type == 4) {
+
+            } else {
+
+            }
 
         }
-
-
     }
 
     /**
@@ -325,8 +383,9 @@ public class MainActivity extends AppCompatActivity{
      * @param first
      * @param second
      * @param type
+     * @param row which row is being combined (0: top, 1: middle, 2: bottom)
      */
-    void combineHorizontal(TextView first, TextView second, int type) {
+    void combineHorizontal(TextView first, TextView second, int type, int row) {
         if (type == 0 || type == 1) {
 
         } else if (type == 2) {
@@ -343,6 +402,8 @@ public class MainActivity extends AppCompatActivity{
      * if column only has one element
      */
     void moveUp(TextView tile) {
+
+
 
 
     }
