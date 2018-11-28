@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveUp(single);
+                    moveVerticle(single, null, 0);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -145,6 +145,18 @@ public class MainActivity extends AppCompatActivity{
                 } else if (board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
 
                     combineVertical(board[1][j], board[2][j], 2, j);
+
+                } else if (board[0][j] != null && board[1][j] != null && !board[0][j].getText().equals(board[1][j].getText())) {
+
+                    moveVertical(board[0][j], board[1][j], 2, j);
+
+                } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
+
+                    moveVertical(board[0][j], board[2][j], 3, j);
+
+                } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+
+                    moveVertical(board[1][j], board[2][j], 4, j);
 
                 }
 
@@ -168,7 +180,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveDown(single);
+                    moveVertical(single, null, 1, j);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -183,6 +195,18 @@ public class MainActivity extends AppCompatActivity{
                 } else if (board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
 
                     combineVertical(board[1][j], board[0][j], 5, j);
+
+                } else if (board[0][j] != null && board[1][j] != null && !board[0][j].getText().equals(board[1][j].getText())) {
+
+                    moveVertical(board[0][j], board[1][j], 5, j);
+
+                } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
+
+                    moveVertical(board[0][j], board[2][j], 6, j);
+
+                } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+
+                    moveVertical(board[1][j], board[2][j], 7, j);
 
                 }
 
@@ -335,6 +359,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[0][2] = newTile;
 
             }
         } else if (row == 1) {
@@ -347,6 +372,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[1][0] = newTile;
             } else if (col == 1) {
                 newSet.connect(newTile.getId(), ConstraintSet.TOP,
                         R.id.guideline2, ConstraintSet.BOTTOM);
@@ -356,6 +382,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[1][1] = newTile;
 
             } else if (col == 2) {
                 newSet.connect(newTile.getId(), ConstraintSet.TOP,
@@ -366,6 +393,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[1][2] = newTile;
 
             }
 
@@ -380,6 +408,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[2][0] = newTile;
             } else if (col == 1) {
                 newSet.connect(newTile.getId(), ConstraintSet.TOP,
                         R.id.guideline3, ConstraintSet.BOTTOM);
@@ -389,6 +418,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[2][1] = newTile;
 
             } else if (col == 2) {
                 newSet.connect(newTile.getId(), ConstraintSet.TOP,
@@ -399,6 +429,7 @@ public class MainActivity extends AppCompatActivity{
                 newSet.applyTo(layout);
 
                 newTile.setVisibility(View.VISIBLE);
+                board[2][2] = newTile;
 
             }
 
@@ -430,23 +461,35 @@ public class MainActivity extends AppCompatActivity{
         //determine if it is the special case and execute that piece of code
         //otherwise put everything to bottom/top
 
+        //copies the layout of the app
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
+
         String catType = (String) first.getText();
         int catToAdd = Integer.parseInt(catType) + 1; //pass this into add
-
 
         if (col == 0) {
             if (type == 0 || type == 1) {
                 addTile(catToAdd, 0, 0);
 
-                newSet.clear(R.id.textView1, ConstraintSet.TOP);
-                newSet.clear(R.id.textView2, ConstraintSet.TOP);
-                newSet.connect(R.id.textView1, ConstraintSet.BOTTOM,
-                        R.id.gdln100, ConstraintSet.BOTTOM);
-                newSet.connect(R.id.textView2, ConstraintSet.BOTTOM,
-                        R.id.gdln100, ConstraintSet.BOTTOM);
+                if (board[2][0] != null) {
+                    newSet.clear(board[2][0].getId(), ConstraintSet.TOP);
+                    newSet.clear(board[2][0].getId(), ConstraintSet.START);
+
+                    newSet.connect(board[2][0].getId(), ConstraintSet.TOP,
+                            R.id.guideline2, ConstraintSet.BOTTOM);
+                    newSet.connect(board[2][0].getId(), ConstraintSet.START,
+                            R.id.guideline2, ConstraintSet.END);
+
+
+                }
+                board[1][0] = board[2][0];
+                board[2][0] = null;
 
                 //slows the transition of the tile to the new guideline
                 TransitionManager.beginDelayedTransition(layout);
+
+                newSet.applyTo(layout);
 
             } else if (type == 2) {
 
@@ -505,27 +548,80 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * if column only has one element
+     * if columns has no equal tiles then just move
+     *
+     * @param tile1
+     * @param tile2
+     * @param type 0: single element moving up 1: single element moving down. Rest are the same as combineVertical but with the tiles not equal
+     * @param col
      */
-    void moveUp(TextView tile) {
+    void moveVertical(TextView tile1, TextView tile2, int type, int col) {
+        if (tile2 == null) {
+            //single element moving up or down
+            if (type == 0) {
 
+            } else {
 
+            }
+        }
+        if (col == 0) {
+            if (type == 2) {
+
+            } else if (type == 3) {
+
+            } else if (type == 4) {
+
+            } else if (type == 5) {
+
+            } else if (type == 6) {
+
+            } else if (type == 7) {
+
+            }
+
+        } else if (col == 1) {
+            if (type == 2) {
+
+            } else if (type == 3) {
+
+            } else if (type == 4) {
+
+            } else if (type == 5) {
+
+            } else if (type == 6) {
+
+            } else if (type == 7) {
+
+            }
+
+        } else if (col == 2) {
+            if (type == 2) {
+
+            } else if (type == 3) {
+
+            } else if (type == 4) {
+
+            } else if (type == 5) {
+
+            } else if (type == 6) {
+
+            } else if (type == 7) {
+
+            }
+
+        }
 
 
     }
 
     /**
-     * if column only has one element
+     * if rows has no equal tiles then just move
+     * @param tile1
+     * @param tile2
+     * @param type
+     * @param row
      */
-    void moveDown(TextView tile) {
-
-    }
-
-    void moveRight(TextView tile) {
-
-    }
-
-    void moveLeft(TextView tile) {
+    void moveHorizontal(TextView tile1, TextView tile2, int type, int row) {
 
     }
 
