@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 import 	android.util.TypedValue;
 import android.content.res.Resources;
 import android.support.constraint.ConstraintLayout;
@@ -21,7 +21,7 @@ import android.view.View.OnTouchListener;
 public class MainActivity extends AppCompatActivity{
     private int squareSide;
     private int margin;
-    private ImageView[][] board = new ImageView[3][3];
+    private TextView[][] board = new TextView[3][3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
 
         squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
-        ImageView first = findViewById(R.id.imageView3);
+        TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
 
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
         //Check if all tiles are full, if so then display end game score as a toast and reset board
         //
         //
-        //
+        //combining two tiles is basically just making one tile invisible and changing the text
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -100,14 +100,108 @@ public class MainActivity extends AppCompatActivity{
      * @param board
      * @param direction
      */
-    void moveTiles(ImageView[][] board, int direction) {
+    void moveTiles(TextView[][] board, int direction) {
+
+        //1: up 2: down 3: right 4: left
         //copies layout of the current app
         final ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layout);
 
         //makes a newTile
-        ImageView newTile = new ImageView(layout.getContext());
+        TextView newTile = new TextView(layout.getContext());
+        //gives new tile an id
+        newTile.setId(View.generateViewId());
 
-        newTile.setID(View.generateViewId());.
+        //if direction is up
+        if (direction == 1) {
+
+            //determines what kind of vertical combination should be performed
+            for (int j = 0; j < board[0].length; j++) {
+                //makes sure no null and then determine if equal or not
+                if (board[0][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
+
+                    combineVertical(board[0][j], board[1][j], 0);
+
+                } else if (board[0][j] != null && board[2][j] != null && board[0][j].equals(board[2][j].getText())) {
+
+                    combineVertical(board[0][j], board[2][j], 1);
+
+                } else if (board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+
+                    combineVertical(board[1][j], board[2][j], 2);
+
+                }
+
+            }
+        }
+        //if direction is down
+        if (direction == 2) {
+
+            //determines what kind of vertical combination should be performed
+            for (int j = 0; j < board[0].length; j++) {
+                //makes sure no null and then determine if equal or not
+                if (board[2][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
+
+                    combineVertical(board[2][j], board[1][j], 3);
+
+                } else if (board[2][j] != null && board[0][j] != null && board[0][j].equals(board[2][j].getText())) {
+
+                    combineVertical(board[2][j], board[0][j], 4);
+
+                } else if (board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+
+                    combineVertical(board[1][j], board[0][j], 5);
+
+                }
+
+            }
+        }
+        //if direction is to the right
+        if (direction == 3) {
+
+            //determines what kind of vertical combination should be performed
+            for (int i = 0; i < board.length; i++) {
+                //makes sure no null and then determine if equal or not
+                if (board[i][0] != null && board[i][1] != null && board[i][0].getText().equals(board[i][1].getText())) {
+
+                    combineHorizontal(board[i][0], board[i][1], 0);
+
+                } else if (board[i][0] != null && board[i][2] != null && board[i][0].equals(board[i][2].getText())) {
+
+                    combineHorizontal(board[i][0], board[i][2], 1);
+
+                } else if (board[i][1] != null && board[i][2] != null && board[i][1].equals(board[i][2].getText())) {
+
+                    combineHorizontal(board[i][1], board[i][2], 2);
+
+                }
+
+            }
+        }
+        //if direction is to the left
+        if (direction == 4) {
+
+            //determines what kind of vertical combination should be performed
+            for (int i = 0; i < board.length; i++) {
+                //makes sure no null and then determine if equal or not
+                if (board[i][2] != null && board[i][1] != null && board[i][2].getText().equals(board[i][1].getText())) {
+
+                    combineHorizontal(board[i][2], board[i][1], 0);
+
+                } else if (board[i][2] != null && board[i][0] != null && board[i][2].equals(board[i][0].getText())) {
+
+                    combineHorizontal(board[i][2], board[i][0], 1);
+
+                } else if (board[i][1] != null && board[i][0] != null && board[i][1].equals(board[i][0].getText())) {
+
+                    combineHorizontal(board[i][1], board[i][0], 2);
+
+                }
+
+            }
+        }
+
+
+
 
     }
 
@@ -116,7 +210,7 @@ public class MainActivity extends AppCompatActivity{
      * @param tile
      * @param board
      */
-    void addTile(ImageView tile, ImageView[][] board) {
+    void addTile(TextView tile, TextView[][] board) {
 
     }
 
@@ -125,6 +219,30 @@ public class MainActivity extends AppCompatActivity{
      * @param score
      */
     void updateScore(String score) {
+
+    }
+
+    /**
+     * handles the different types of vertical combinations.
+     * 1 (top/middle), 2(top/bottom), 3(middle/bottom) are for up
+     * 3(bottom/middle), 4(bottom/top), 5(middle/top) are for down
+     * @param first
+     * @param second
+     * @param type
+     */
+    void combineVertical(TextView first, TextView second, int type) {
+
+    }
+
+    /**
+     * handles the different types of horizontal combinations.
+     * 1(right/middle), 2(right/left), 3(middle/left) are for right
+     * 3(left, middle), 4(left, right(, 5(middle, right) are for left
+     * @param first
+     * @param second
+     * @param type
+     */
+    void combineHorizontal(TextView first, TextView second, int type) {
 
     }
 
