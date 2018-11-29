@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity{
     void moveTiles(TextView[][] board, int direction) {
 
         //1: up 2: down 3: right 4: left
+
         //if direction is up
         if (direction == 1) {
 
@@ -131,22 +132,32 @@ public class MainActivity extends AppCompatActivity{
                 }
                 //makes sure no null and then determine if equal or not
                 if (board[0][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
+                    //top/middle
 
                     combineVertical(board[0][j], board[1][j], 0, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && board[0][j].equals(board[2][j].getText())) {
+                    //top/null/bottom
 
                     combineVertical(board[0][j], board[2][j], 1, j);
 
-                } else if (board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+                    //null/middle/bottom
 
-                    combineVertical(board[1][j], board[2][j], 2, j); //have to check if above is null or not
+                    combineVertical(board[1][j], board[2][j], 2, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+                    //something/middle/bottom
+
+                    combineVertical(board[1][j], board[2][j], 3, j);
+
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].equals(board[2][j].getText())) {
+                    //top/null/bottom
 
                     moveVertical(board[0][j], board[2][j], 2, j);
 
-                } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+                    //null/middle/bottom
 
                     moveVertical(board[1][j], board[2][j], 3, j);
 
@@ -177,24 +188,34 @@ public class MainActivity extends AppCompatActivity{
                 }
                 //makes sure no null and then determine if equal or not
                 if (board[2][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
+                    //bottom/middle
 
-                    combineVertical(board[2][j], board[1][j], 3, j);
+                    combineVertical(board[2][j], board[1][j], 4, j);
 
-                } else if (board[2][j] != null && board[0][j] != null && board[0][j].equals(board[2][j].getText())) {
+                } else if (board[2][j] != null && board[0][j] != null && board[1][j] == null && board[0][j].equals(board[2][j].getText())) {
+                    //bottom/null/top
 
-                    combineVertical(board[2][j], board[0][j], 4, j);
+                    combineVertical(board[2][j], board[0][j], 5, j);
 
-                } else if (board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+                    //null/middle/top
 
-                    combineVertical(board[1][j], board[0][j], 5, j);
+                    combineVertical(board[1][j], board[0][j], 6, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && !board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+                    //something/middle/top
 
-                    moveVertical(board[0][j], board[2][j], 4, j);
+                    combineVertical(board[1][j], board[0][j], 7, j);
 
-                } else if (board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].equals(board[2][j].getText())) {
+                    //bottom/null/top
 
-                    moveVertical(board[1][j], board[2][j], 5, j);
+                    moveVertical(board[2][j], board[0][j], 4, j);
+
+                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && !board[1][j].equals(board[0][j].getText())) {
+                    //null/middle/top
+
+                    moveVertical(board[1][j], board[0][j], 5, j);
 
                 }
 
@@ -550,32 +571,45 @@ public class MainActivity extends AppCompatActivity{
 
 
         newSet.clone(layout);
-        TextView single = null;
-        for (int i = 0; i < board.length; i++) {
-            if (board[i][col] != null) {
-                single = board[i][col];
-                break;
-            }
-        }
         if (type == 0) {
-            newSet.clear(single.getId(), ConstraintSet.TOP);
-            newSet.connect(single.getId(), ConstraintSet.TOP,
+            newSet.clear(tile1.getId(), ConstraintSet.TOP);
+            newSet.connect(tile1.getId(), ConstraintSet.TOP,
                     R.id.guideline, ConstraintSet.BOTTOM);
         } else if (type == 1){
-            newSet.clear(single.getId(), ConstraintSet.TOP);
-            newSet.connect(single.getId(), ConstraintSet.TOP,
+            newSet.clear(tile1.getId(), ConstraintSet.TOP);
+            newSet.connect(tile1.getId(), ConstraintSet.TOP,
                     R.id.guideline3, ConstraintSet.BOTTOM);
         } else if (type == 2) {
-            //top/bottom
+            //top/bottom going up
             newSet.clear(tile2.getId(), ConstraintSet.TOP);
-            newSet.connect(single.getId(), ConstraintSet.TOP,
+            newSet.connect(tile2.getId(), ConstraintSet.TOP,
                     R.id.guideline2, ConstraintSet.BOTTOM);
 
         } else if (type == 3) {
+            //null/middle/bottom going up
+            newSet.clear(tile1.getId(), ConstraintSet.TOP);
+            newSet.clear(tile2.getId(), ConstraintSet.TOP);
+            newSet.connect(tile1.getId(), ConstraintSet.TOP,
+                    R.id.guideline, ConstraintSet.BOTTOM);
+            newSet.connect(tile2.getId(), ConstraintSet.TOP,
+                    R.id.guideline2, ConstraintSet.BOTTOM);
+
 
         } else if (type == 4) {
+            //bottom/null/top going down
+            newSet.clear(tile2.getId(), ConstraintSet.TOP);
+            newSet.connect(tile2.getId(), ConstraintSet.TOP,
+                    R.id.guideline2, ConstraintSet.BOTTOM);
+
 
         } else if (type == 5) {
+            //null/middle/top going down
+            newSet.clear(tile1.getId(), ConstraintSet.TOP);
+            newSet.clear(tile2.getId(), ConstraintSet.TOP);
+            newSet.connect(tile1.getId(), ConstraintSet.TOP,
+                    R.id.guideline3, ConstraintSet.BOTTOM);
+            newSet.connect(tile2.getId(), ConstraintSet.TOP,
+                    R.id.guideline2, ConstraintSet.BOTTOM);
 
         }
         TransitionManager.beginDelayedTransition(layout);
