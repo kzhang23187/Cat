@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity{
     private int squareSide;
     private int margin;
     private TextView[][] board = new TextView[3][3];
+    //copies the layout of the app
+    ConstraintLayout layout = null;
+    ConstraintSet newSet = new ConstraintSet();
+    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity{
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
         TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
+        layout = findViewById(R.id.layout);
+        newSet.clone(layout);
+
 
 
         //What to do with each button click
@@ -58,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(final View view) {
                 moveTiles(board, 1);
-                addTile(0,1,0);
+                addTile(-1, 1,0);
 
 
             }
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveVertical(single, null, 0, j);
+                    moveVertical(single, null, 0);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -136,30 +143,30 @@ public class MainActivity extends AppCompatActivity{
 
                     combineVertical(board[0][j], board[1][j], 0, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && board[0][j].getText().equals(board[2][j].getText())) {
                     //top/null/bottom
 
                     combineVertical(board[0][j], board[2][j], 1, j);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
                     //null/middle/bottom
 
                     combineVertical(board[1][j], board[2][j], 2, j);
 
-                } else if (board[0][j] != null && board[1][j] != null && board[2][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[1][j] != null && board[2][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
                     //something/middle/bottom
 
                     combineVertical(board[1][j], board[2][j], 3, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].getText().equals(board[2][j].getText())) {
                     //top/null/bottom
 
-                    moveVertical(board[0][j], board[2][j], 2, j);
+                    moveVertical(board[0][j], board[2][j], 2);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && !board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[2][j] != null && !board[1][j].getText().equals(board[2][j].getText())) {
                     //null/middle/bottom
 
-                    moveVertical(board[1][j], board[2][j], 3, j);
+                    moveVertical(board[1][j], board[2][j], 3);
 
                 }
 
@@ -183,7 +190,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveVertical(single, null, 1, j);
+                    moveVertical(single, null, 1);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -192,30 +199,30 @@ public class MainActivity extends AppCompatActivity{
 
                     combineVertical(board[2][j], board[1][j], 4, j);
 
-                } else if (board[2][j] != null && board[0][j] != null && board[1][j] == null && board[0][j].equals(board[2][j].getText())) {
+                } else if (board[2][j] != null && board[0][j] != null && board[1][j] == null && board[0][j].getText().equals(board[2][j].getText())) {
                     //bottom/null/top
 
                     combineVertical(board[2][j], board[0][j], 5, j);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
                     //null/middle/top
 
                     combineVertical(board[1][j], board[0][j], 6, j);
 
-                } else if (board[0][j] != null && board[1][j] != null && board[0][j] != null && board[1][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
                     //something/middle/top
 
                     combineVertical(board[1][j], board[0][j], 7, j);
 
-                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[2][j] != null && board[1][j] == null && !board[0][j].getText().equals(board[2][j].getText())) {
                     //bottom/null/top
 
-                    moveVertical(board[2][j], board[0][j], 4, j);
+                    moveVertical(board[2][j], board[0][j], 4);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && !board[1][j].equals(board[0][j].getText())) {
+                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && !board[1][j].getText().equals(board[0][j].getText())) {
                     //null/middle/top
 
-                    moveVertical(board[1][j], board[0][j], 5, j);
+                    moveVertical(board[1][j], board[0][j], 5);
 
                 }
 
@@ -238,7 +245,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveHorizontal(single, null, 0, i);
+                    moveHorizontal(single, null, 0);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -246,11 +253,11 @@ public class MainActivity extends AppCompatActivity{
 
                     combineHorizontal(board[i][0], board[i][1], 0, i);
 
-                } else if (board[i][0] != null && board[i][2] != null && board[i][0].equals(board[i][2].getText())) {
+                } else if (board[i][0] != null && board[i][2] != null && board[i][0].getText().equals(board[i][2].getText())) {
 
                     combineHorizontal(board[i][0], board[i][2], 1, i);
 
-                } else if (board[i][1] != null && board[i][2] != null && board[i][1].equals(board[i][2].getText())) {
+                } else if (board[i][1] != null && board[i][2] != null && board[i][1].getText().equals(board[i][2].getText())) {
 
                     combineHorizontal(board[i][1], board[i][2], 2, i);
 
@@ -276,7 +283,7 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveHorizontal(single, null, 1, i);
+                    moveHorizontal(single, null, 1);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
@@ -284,11 +291,11 @@ public class MainActivity extends AppCompatActivity{
 
                     combineHorizontal(board[i][2], board[i][1], 3, i);
 
-                } else if (board[i][2] != null && board[i][0] != null && board[i][2].equals(board[i][0].getText())) {
+                } else if (board[i][2] != null && board[i][0] != null && board[i][2].getText().equals(board[i][0].getText())) {
 
                     combineHorizontal(board[i][2], board[i][0], 4, i);
 
-                } else if (board[i][1] != null && board[i][0] != null && board[i][1].equals(board[i][0].getText())) {
+                } else if (board[i][1] != null && board[i][0] != null && board[i][1].getText().equals(board[i][0].getText())) {
 
                     combineHorizontal(board[i][1], board[i][0], 5, i);
 
@@ -309,19 +316,26 @@ public class MainActivity extends AppCompatActivity{
      * @param col which col to add to
      */
     void addTile(int catType, int row, int col) {
-        //copies the layout of the app
-        final ConstraintLayout layout = findViewById(R.id.layout);
-        ConstraintSet newSet = new ConstraintSet();
 
+        Drawable drawableCat = null;
         ///Make a new Cat based off old cats
         //ADD MORE CONDITIONS FOR MORE CATS
         Context mContext = getApplicationContext();
-        Drawable drawableCat = null;
+        if (catType == -1) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+        }
         if (catType == 0) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat1);
-            drawableCat.setBounds( 0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight() );
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
@@ -330,11 +344,8 @@ public class MainActivity extends AppCompatActivity{
         newTile.setVisibility(View.INVISIBLE);
         newTile.setGravity(Gravity.CENTER);
 
-        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
         newTile.setLayoutParams(lp);
         layout.addView(newTile);
-
-        newSet.clone(layout);
 
         //determines which position to add tile to
         if (row == 0) {
@@ -456,8 +467,6 @@ public class MainActivity extends AppCompatActivity{
 
     /**
      * handles the different types of vertical combinations. and calls updateScore
-     * 0 (top/middle), 1(top/bottom), 2(middle/bottom) are for up
-     * 3(bottom/middle), 4(bottom/top), 5(middle/top) are for down
      * special case for middle/bottom and middle/top (if there is a tile above/below that is present
      * then it should combine to the middle not all the way
      * @param first
@@ -470,69 +479,176 @@ public class MainActivity extends AppCompatActivity{
         //determine if it is the special case and execute that piece of code
         //otherwise put everything to bottom/top
 
-        //copies the layout of the app
-        final ConstraintLayout layout = findViewById(R.id.layout);
-        ConstraintSet newSet = new ConstraintSet();
 
         String catType = (String) first.getText();
         int catToAdd = Integer.parseInt(catType) + 1; //pass this into add
 
-        if (col == 0) {
-            if (type == 0 || type == 1) {
-                addTile(catToAdd, 0, 0);
+            if (type == 0) {
+                //top/middle
+                //remove destination tile
+                layout.removeView(first);
+                first.setVisibility(View.INVISIBLE);
+                //move tiles to destination tile
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
 
-                if (board[2][0] != null) {
-                    newSet.clear(board[2][0].getId(), ConstraintSet.TOP);
-                    newSet.clear(board[2][0].getId(), ConstraintSet.START);
-
-                    newSet.connect(board[2][0].getId(), ConstraintSet.TOP,
+                if (board[2][col] != null) {
+                    newSet.clear(board[2][col].getId(), ConstraintSet.TOP);
+                    newSet.connect(board[2][col].getId(), ConstraintSet.TOP,
                             R.id.guideline2, ConstraintSet.BOTTOM);
-                    newSet.connect(board[2][0].getId(), ConstraintSet.START,
-                            R.id.guideline2, ConstraintSet.END);
-
-
                 }
-                board[1][0] = board[2][0];
-                board[2][0] = null;
 
-                //slows the transition of the tile to the new guideline
-                TransitionManager.beginDelayedTransition(layout);
+                //remove tile at destination and then add new cat tile
+                layout.removeView(second);
+                second.setVisibility(View.INVISIBLE);
+                addTile(catToAdd, 0, col);
+                //update board state
+                board[1][col] = board[2][col];
+                board[2][col] = null;
+                //call update score;
 
-                newSet.applyTo(layout);
+            } else if (type == 1) {
+                //top/null/bottom
+                //remove destination tile
+                layout.removeView(first);
+                //move tiles to destination tile
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
 
-            } else if (type == 2) {
+                //remove tile at destination and then add new cat tile
+                layout.removeView(second);
+                addTile(catToAdd, 0, col);
+                //update board state
+                board[2][col] = null;
+                //call update score;
 
-            } else if (type == 3 || type == 4) {
-
-            } else {
-
-            }
-
-
-        } else if (col == 1) {
-            if (type == 0 || type == 1) {
-
-            } else if (type == 2) {
-
-            } else if (type == 3 || type == 4) {
-
-            } else {
-
-            }
-
-        } else if (col == 2) {
-            if (type == 0 || type == 1) {
 
             } else if (type == 2) {
+                //null/middle/bottom
+                //move tiles to destination tile
+                newSet.clear(first.getId(), ConstraintSet.TOP);
+                newSet.connect(first.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
 
-            } else if (type == 3 || type == 4) {
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline, ConstraintSet.BOTTOM);
+
+                //remove tile at destination and then add new cat tile
+                layout.removeView(first);
+                layout.removeView(second);
+                addTile(catToAdd, 0, col);
+                //update board state
+                board[1][col] = null;
+                board[2][col] = null;
+                //call update score;
+
+            } else if (type == 3) {
+                //something/middle/bottom
+                //move tiles to destination tile
+                layout.removeView(first);
+
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+
+                //remove tile at destination and then add new cat tile
+                layout.removeView(second);
+                addTile(catToAdd, 1, col);
+                //update board state
+                board[2][col] = null;
+                //call update score;
+
+            } else if (type == 4) {
+                //bottom/middle
+                //move tiles to destination tile
+                layout.removeView(second);
+
+                newSet.clear(first.getId(), ConstraintSet.TOP);
+                newSet.connect(first.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+
+                if (board[0][col] != null) {
+                    newSet.clear(board[0][col].getId(), ConstraintSet.TOP);
+                    newSet.connect(board[0][col].getId(), ConstraintSet.TOP,
+                            R.id.guideline2, ConstraintSet.BOTTOM);
+                }
+
+                //remove tile at destination and then add new cat tile
+
+                layout.removeView(first);
+                addTile(catToAdd, 2, col);
+                //update board state
+                board[1][col] = board[0][col];
+                board[0][col] = null;
+                //call update score;
+
+            } else if (type == 5) {
+                //bottom/null/top
+                //move tiles to destination tile
+                layout.removeView(first);
+
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+
+                //remove tile at destination and then add new cat tile
+                layout.removeView(second);
+                addTile(catToAdd, 2, col);
+
+                //update board state
+                board[0][col] = null;
+                //call update score;
+
+
+            } else if (type == 6) {
+                //null/middle/top
+                //move tiles to destination tile
+
+                newSet.clear(first.getId(), ConstraintSet.TOP);
+                newSet.connect(first.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline3, ConstraintSet.BOTTOM);
+
+                //remove tile at destination and then add new cat tile
+                layout.removeView(first);
+                layout.removeView(second);
+                addTile(catToAdd, 2, col);
+
+                //update board state
+                board[0][col] = null;
+                board[1][col] = null;
+                //call update score;
+
 
             } else {
+                //something/middle/top
+                //move tiles to destination tile
+                layout.removeView(first);
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+
+                //remove tile at destination and then add new cat tile
+                layout.removeView(second);
+                addTile(catToAdd, 1, col);
+
+                //update board state
+                board[0][col] = null;
+                //call update score;
+
 
             }
+        TransitionManager.beginDelayedTransition(layout);
+
+        newSet.applyTo(layout);
 
         }
-    }
 
     /**
      * handles the different types of horizontal combinations.
@@ -562,20 +678,16 @@ public class MainActivity extends AppCompatActivity{
      * @param tile1
      * @param tile2
      * @param type 0: single element moving up 1: single element moving down. 2: top/bottom 3: middle/bottom
-     * @param col
      */
-    void moveVertical(TextView tile1, TextView tile2, int type, int col) {
-        //copies the layout of the app
-        final ConstraintLayout layout = findViewById(R.id.layout);
-        ConstraintSet newSet = new ConstraintSet();
+    void moveVertical(TextView tile1, TextView tile2, int type) {
 
-
-        newSet.clone(layout);
         if (type == 0) {
+            //single tile going up
             newSet.clear(tile1.getId(), ConstraintSet.TOP);
             newSet.connect(tile1.getId(), ConstraintSet.TOP,
                     R.id.guideline, ConstraintSet.BOTTOM);
         } else if (type == 1){
+            //single tile going down
             newSet.clear(tile1.getId(), ConstraintSet.TOP);
             newSet.connect(tile1.getId(), ConstraintSet.TOP,
                     R.id.guideline3, ConstraintSet.BOTTOM);
@@ -618,16 +730,13 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-    }
-
     /**
      * if rows has no equal tiles then just move
      * @param tile1
      * @param tile2
      * @param type
-     * @param row
      */
-    void moveHorizontal(TextView tile1, TextView tile2, int type, int row) {
+    void moveHorizontal(TextView tile1, TextView tile2, int type) {
 
     }
 
