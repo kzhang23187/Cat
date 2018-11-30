@@ -59,14 +59,14 @@ public class MainActivity extends AppCompatActivity{
         findViewById(R.id.right).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                moveTiles(board, 3);
+                moveTiles(board, 4);
 
             }
         });
         findViewById(R.id.left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                moveTiles(board, 4);
+                moveTiles(board, 3);
 
             }
         });
@@ -217,22 +217,37 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveHorizontal(single, null, 0);
+                    moveHorizontal(single, null, 0, i);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
                 if (board[i][0] != null && board[i][1] != null && board[i][0].getText().equals(board[i][1].getText())) {
+                    //right/middle
 
                     combineHorizontal(board[i][0], board[i][1], 0, i);
 
-                } else if (board[i][0] != null && board[i][2] != null && board[i][0].getText().equals(board[i][2].getText())) {
+                } else if (board[i][0] != null && board[i][2] != null && board[i][1] == null && board[i][0].getText().equals(board[i][2].getText())) {
+                    //right/null/left
 
                     combineHorizontal(board[i][0], board[i][2], 1, i);
 
-                } else if (board[i][1] != null && board[i][2] != null && board[i][1].getText().equals(board[i][2].getText())) {
+                } else if (board[i][0] == null && board[i][1] != null && board[i][2] != null && board[i][1].getText().equals(board[i][2].getText())) {
+                    //null/middle/left
 
                     combineHorizontal(board[i][1], board[i][2], 2, i);
 
+                } else if (board[i][0] != null && board[i][1] != null && board[i][2] != null && board[i][1].getText().equals(board[i][2].getText())) {
+                    //something/middle/left
+
+                    combineHorizontal(board[i][1], board[i][2], 3, i);
+
+                } else if (board[i][0] != null && board[i][2] == null && board[i][2] != null && !board[i][0].getText().equals(board[i][2].getText())) {
+                    //right/null/left
+                    moveHorizontal(board[i][0], board[i][2], 2, i);
+
+                } else if (board[i][0] == null && board[i][1] != null && board[i][2] != null && !board[i][1].getText().equals(board[i][2].getText())) {
+                    //null/middle/left
+                    moveHorizontal(board[i][1], board[i][2], 3, i);
                 }
 
             }
@@ -255,22 +270,36 @@ public class MainActivity extends AppCompatActivity{
 
                 }
                 if (count == 2) {
-                    moveHorizontal(single, null, 1);
+                    moveHorizontal(single, null, 1, i);
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
                 if (board[i][2] != null && board[i][1] != null && board[i][2].getText().equals(board[i][1].getText())) {
+                    //middle/left combining left
 
-                    combineHorizontal(board[i][2], board[i][1], 3, i);
+                    combineHorizontal(board[i][1], board[i][2], 4, i);
 
-                } else if (board[i][2] != null && board[i][0] != null && board[i][2].getText().equals(board[i][0].getText())) {
+                } else if (board[i][2] != null && board[i][1] == null && board[i][0] != null && board[i][2].getText().equals(board[i][0].getText())) {
+                    //right/null/left combining left
 
-                    combineHorizontal(board[i][2], board[i][0], 4, i);
+                    combineHorizontal(board[i][0], board[i][2], 5, i);
 
-                } else if (board[i][1] != null && board[i][0] != null && board[i][1].getText().equals(board[i][0].getText())) {
+                } else if (board[i][1] != null && board[i][0] != null && board[i][2] == null && board[i][1].getText().equals(board[i][0].getText())) {
+                    //right/middle/null combining left
 
-                    combineHorizontal(board[i][1], board[i][0], 5, i);
+                    combineHorizontal(board[i][0], board[i][1], 6, i);
 
+                } else if (board[i][1] != null && board[i][0] != null && board[i][2] != null && board[i][1].getText().equals(board[i][0].getText())) {
+                    //right/middle/something combining left
+
+                    combineHorizontal(board[i][0], board[i][1], 7, i);
+
+                } else if (board[i][2] != null && board[i][1] == null && board[i][0] != null && !board[i][2].getText().equals(board[i][0].getText())) {
+                    //right/null/left moving left
+                    moveHorizontal(board[i][0], board[i][2], 4, i);
+                } else if (board[i][1] != null && board[i][0] != null && board[i][2] == null && !board[i][1].getText().equals(board[i][0].getText())) {
+                    //right/middle/null moving left
+                    moveHorizontal(board[i][0], board[i][1], 5, i);
                 }
 
             }
@@ -280,7 +309,7 @@ public class MainActivity extends AppCompatActivity{
         if (isGameOver()) {
 
             //DO SOMETHING INDICATING GAME IS OVER
-        } else {
+        } else if (valid != null){
             addTile(0, valid.get(0), valid.get(1));
         }
 
@@ -310,7 +339,11 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         }
-        return valid.get((int) (Math.random() * valid.size()));
+        if (valid.size() != 0) {
+            return valid.get((int) (Math.random() * valid.size()));
+        } else {
+            return null;
+        }
 
     }
 
@@ -339,8 +372,7 @@ public class MainActivity extends AppCompatActivity{
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
             textId = "0";
-        }
-        if (catType == 1) {
+        } else if (catType == 1) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat1);
@@ -348,6 +380,22 @@ public class MainActivity extends AppCompatActivity{
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
             textId = "1";
+        } else if (catType == 2) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat2);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "2";
+        } else if (catType == 3) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat3);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "3";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
@@ -502,173 +550,108 @@ public class MainActivity extends AppCompatActivity{
 
         int catToAdd = Integer.parseInt(first.getText().toString()); //pass this into add
 
-            if (type == 0) {
-                //top/middle
-                //remove destination tile
-                //move tiles to destination tile
-                //newSet.clear(second.getId(), ConstraintSet.TOP);
-                //newSet.connect(second.getId(), ConstraintSet.TOP,
-                //        R.id.guideline, ConstraintSet.BOTTOM);
+        if (type == 0) {
+            //top/middle
 
-                if (board[2][col] != null) {
-                    newSet.clear(board[2][col].getId(), ConstraintSet.TOP);
-                    newSet.connect(board[2][col].getId(), ConstraintSet.TOP,
-                            R.id.guideline2, ConstraintSet.BOTTOM);
-                }
-
-                //remove tile at destination and then add new cat tile
-
-                layout.removeView(first);
-                layout.removeView(second);
-                //second.setVisibility(View.INVISIBLE);
-                addTile(catToAdd + 1, 0, col);
-                //update board state
-                board[1][col] = board[2][col];
-                board[2][col] = null;
-                //call update score;
-
-            } else if (type == 1) {
-                //top/null/bottom
-                //remove destination tile
-                //move tiles to destination tile
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 0, col);
-                //update board state
-                board[2][col] = null;
-                //call update score;
-
-
-            } else if (type == 2) {
-                //null/middle/bottom
-                //move tiles to destination tile
-                newSet.clear(first.getId(), ConstraintSet.TOP);
-                newSet.connect(first.getId(), ConstraintSet.TOP,
-                        R.id.guideline, ConstraintSet.BOTTOM);
-
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 0, col);
-                //update board state
-                board[1][col] = null;
-                board[2][col] = null;
-                //call update score;
-
-            } else if (type == 3) {
-                //something/middle/bottom
-                //move tiles to destination tile
-
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
+            if (board[2][col] != null) {
+                newSet.clear(board[2][col].getId(), ConstraintSet.TOP);
+                newSet.connect(board[2][col].getId(), ConstraintSet.TOP,
                         R.id.guideline2, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 1, col);
-                //update board state
-                board[2][col] = null;
-                //call update score;
-
-            } else if (type == 4) {
-                //bottom/middle
-                //move tiles to destination tile
-
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline3, ConstraintSet.BOTTOM);
-
-                if (board[0][col] != null) {
-                    newSet.clear(board[0][col].getId(), ConstraintSet.TOP);
-                    newSet.connect(board[0][col].getId(), ConstraintSet.TOP,
-                            R.id.guideline2, ConstraintSet.BOTTOM);
-                }
-
-                //remove tile at destination and then add new cat tile
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 2, col);
-                //update board state
-                board[1][col] = board[0][col];
-                board[0][col] = null;
-                //call update score;
-
-            } else if (type == 5) {
-                //bottom/null/top
-                //move tiles to destination tile
-
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline3, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 2, col);
-
-                //update board state
-                board[0][col] = null;
-                //call update score;
-
-
-            } else if (type == 6) {
-                //null/middle/top
-                //move tiles to destination tile
-
-                newSet.clear(first.getId(), ConstraintSet.TOP);
-                newSet.connect(first.getId(), ConstraintSet.TOP,
-                        R.id.guideline5, ConstraintSet.BOTTOM);
-
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline3, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 2, col);
-
-                //update board state
-                board[0][col] = null;
-                board[1][col] = null;
-                //call update score;
-
-
-            } else {
-                //something/middle/top
-                //move tiles to destination tile
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline2, ConstraintSet.BOTTOM);
-
-                //remove tile at destination and then add new cat tile
-                layout.removeView(first);
-                layout.removeView(second);
-                addTile(catToAdd + 1, 1, col);
-
-                //update board state
-                board[0][col] = null;
-                //call update score;
-
-
             }
+
+            //remove tile at destination and then add new cat tile
+
+            layout.removeView(first);
+            layout.removeView(second);
+            //second.setVisibility(View.INVISIBLE);
+            addTile(catToAdd + 1, 0, col);
+            //update board state
+            board[1][col] = board[2][col];
+            board[2][col] = null;
+
+        } else if (type == 1) {
+            //top/null/bottom
+
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 0, col);
+            //update board state
+            board[2][col] = null;
+
+
+        } else if (type == 2) {
+            //null/middle/bottom
+            //move tiles to destination tile
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 0, col);
+            //update board state
+            board[1][col] = null;
+            board[2][col] = null;
+
+        } else if (type == 3) {
+            //something/middle/bottom
+
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 1, col);
+            //update board state
+            board[2][col] = null;
+
+
+        } else if (type == 4) {
+            //bottom/middle
+            if (board[0][col] != null) {
+                newSet.clear(board[0][col].getId(), ConstraintSet.TOP);
+                newSet.connect(board[0][col].getId(), ConstraintSet.TOP,
+                        R.id.guideline2, ConstraintSet.BOTTOM);
+            }
+
+            //remove tile at destination and then add new cat tile
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 2, col);
+            //update board state
+            board[1][col] = board[0][col];
+            board[0][col] = null;
+
+        } else if (type == 5) {
+            //bottom/null/top
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 2, col);
+
+            //update board state
+            board[0][col] = null;
+
+
+        } else if (type == 6) {
+            //null/middle/top
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 2, col);
+
+            //update board state
+            board[0][col] = null;
+            board[1][col] = null;
+
+
+        } else {
+            //something/middle/top
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, 1, col);
+
+            //update board state
+            board[0][col] = null;
+
+
+        }
+        //CALL UPDATE SCORE HERE AFTER THE COMBINATIONS AND STILL HAVE THE CAT TYPE
         TransitionManager.beginDelayedTransition(layout);
 
         newSet.applyTo(layout);
-
-        }
+    }
 
     /**
      * handles the different types of horizontal combinations.
@@ -683,15 +666,90 @@ public class MainActivity extends AppCompatActivity{
 
         final ConstraintLayout layout = findViewById(R.id.layout);
         ConstraintSet newSet = new ConstraintSet();
-        if (type == 0 || type == 1) {
+        newSet.clone(layout);
+
+
+        int catToAdd = Integer.parseInt(first.getText().toString());
+
+        if (type == 0) {
+            //right/middle
+            if (board[row][2] != null) {
+                newSet.clear(board[row][2].getId(), ConstraintSet.START);
+                newSet.connect(board[row][2].getId(), ConstraintSet.START,
+                        R.id.guideline6, ConstraintSet.END);
+            }
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 0);
+
+            board[row][1] = board[row][2];
+            board[row][2] = null;
+
+
+        } else if (type == 1) {
+            //right/null/left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 0);
+            board[row][2] = null;
 
         } else if (type == 2) {
+            //null/middle/left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 0);
+            board[row][1] = null;
+            board[row][2] = null;
 
-        } else if (type == 3 || type == 4) {
+        } else if (type == 3) {
+            //something/middle/left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 1);
+            board[row][2] = null;
+
+        } else if (type == 4) {
+            //middle/left combining left
+            if (board[row][0] != null) {
+                newSet.clear(board[row][0].getId(), ConstraintSet.START);
+                newSet.connect(board[row][0].getId(), ConstraintSet.START,
+                        R.id.guideline6, ConstraintSet.END);
+            }
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 2);
+
+            board[row][1] = board[row][0];
+            board[row][0] = null;
+
+
+        } else if (type == 5) {
+            //right/null/left combining left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 2);
+            board[row][0] = null;
+
+        } else if (type == 6) {
+            //right/middle/null combining left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 2);
+            board[row][0] = null;
+            board[row][1] = null;
+
 
         } else {
+            //right/middle/something combining left
+            layout.removeView(first);
+            layout.removeView(second);
+            addTile(catToAdd + 1, row, 1);
+            board[row][0] = null;
 
         }
+        TransitionManager.beginDelayedTransition(layout);
+
+        newSet.applyTo(layout);
 
     }
 
@@ -710,7 +768,7 @@ public class MainActivity extends AppCompatActivity{
         newSet.clone(layout);
 
         if (type == 0) {
-            //single tile going up
+            //single tile going right
             newSet.clear(tile1.getId(), ConstraintSet.TOP);
             newSet.connect(tile1.getId(), ConstraintSet.TOP,
                     R.id.guideline, ConstraintSet.BOTTOM);
@@ -780,7 +838,79 @@ public class MainActivity extends AppCompatActivity{
      * @param tile2
      * @param type
      */
-    void moveHorizontal(TextView tile1, TextView tile2, int type) {
+    void moveHorizontal(TextView tile1, TextView tile2, int type, int row) {
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
+        newSet.clone(layout);
+
+        if (type == 0) {
+            //single tile moving right
+            newSet.clear(tile1.getId(), ConstraintSet.START);
+            newSet.connect(tile1.getId(), ConstraintSet.START,
+                    R.id.guideline5, ConstraintSet.END);
+            board[row][0] = tile1;
+            board[row][1] = null;
+            board[row][2] = null;
+
+
+        } else if (type == 1) {
+            //single tile moving left
+            newSet.clear(tile1.getId(), ConstraintSet.START);
+            newSet.connect(tile1.getId(), ConstraintSet.START,
+                    R.id.guideline7, ConstraintSet.END);
+            board[row][2] = tile1;
+            board[row][0] = null;
+            board[row][1] = null;
+        } else if (type == 2) {
+            //right/null/left moving right
+            newSet.clear(tile2.getId(), ConstraintSet.START);
+            newSet.connect(tile2.getId(), ConstraintSet.START,
+                    R.id.guideline6, ConstraintSet.END);
+            board[row][1] = tile2;
+            board[row][2] = null;
+
+
+        } else if (type == 3) {
+            //null/middle/left moving right
+            newSet.clear(tile1.getId(), ConstraintSet.START);
+            newSet.clear(tile2.getId(), ConstraintSet.START);
+            newSet.connect(tile1.getId(), ConstraintSet.START,
+                    R.id.guideline5, ConstraintSet.END);
+            newSet.connect(tile2.getId(), ConstraintSet.START,
+                    R.id.guideline6, ConstraintSet.END);
+            board[row][0] = tile1;
+            board[row][1] = tile2;
+            board[row][2] = null;
+        } else if (type == 4) {
+            //right/null/left moving left
+            newSet.clear(tile1.getId(), ConstraintSet.START);
+            newSet.connect(tile1.getId(), ConstraintSet.START,
+                    R.id.guideline6, ConstraintSet.END);
+            board[row][2] = tile1;
+            board[row][1] = null;
+            board[row][0] = null;
+
+
+
+        } else if (type == 5) {
+            //right/middle/null moving left
+            newSet.clear(tile1.getId(), ConstraintSet.START);
+            newSet.clear(tile2.getId(), ConstraintSet.START);
+            newSet.connect(tile1.getId(), ConstraintSet.START,
+                    R.id.guideline6, ConstraintSet.END);
+            newSet.connect(tile2.getId(), ConstraintSet.START,
+                    R.id.guideline7, ConstraintSet.END);
+            board[row][1] = tile1;
+            board[row][2] = tile2;
+            board[row][0] = null;
+
+
+        }
+
+        TransitionManager.beginDelayedTransition(layout);
+        newSet.applyTo(layout);
+
 
     }
 
