@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity{
 
                     combineHorizontal(board[i][1], board[i][2], 3, i);
 
-                } else if (board[i][0] != null && board[i][2] == null && board[i][2] != null && !board[i][0].getText().equals(board[i][2].getText())) {
+                } else if (board[i][0] != null && board[i][1] == null && board[i][2] != null && !board[i][0].getText().equals(board[i][2].getText())) {
                     //right/null/left
                     moveHorizontal(board[i][0], board[i][2], 2, i);
 
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity{
     boolean isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null && board[i][j].getText().equals("3")) {
+                if (board[i][j] != null && board[i][j].getText().equals("999")) {
                     return true;
                 }
             }
@@ -396,6 +396,14 @@ public class MainActivity extends AppCompatActivity{
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
             textId = "3";
+        } else if (catType == 4) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat4);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "4";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
