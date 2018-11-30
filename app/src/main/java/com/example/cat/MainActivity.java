@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity{
 
         squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, r.getDisplayMetrics());
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
-        TextView first = findViewById(R.id.cat1);
-        board[1][1] = first;
+
 
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +190,7 @@ public class MainActivity extends AppCompatActivity{
 
                     moveVertical(board[2][j], board[0][j], 4);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && !board[1][j].getText().equals(board[0][j].getText())) {
+                } else if (board[2][j] == null && board[1][j] != null && board[0][j] != null && !board[1][j].getText().equals(board[0][j].getText())) {
                     //null/middle/top
 
                     moveVertical(board[1][j], board[0][j], 5);
@@ -281,7 +280,7 @@ public class MainActivity extends AppCompatActivity{
 
             //DO SOMETHING INDICATING GAME IS OVER
         } else {
-            addTile(-1, valid[0], valid[1]);
+            addTile(0, valid[0], valid[1]);
         }
 
 
@@ -320,7 +319,7 @@ public class MainActivity extends AppCompatActivity{
         ///Make a new Cat based off old cats
         //ADD MORE CONDITIONS FOR MORE CATS
         Context mContext = getApplicationContext();
-        if (catType == -1) {
+        if (catType == 0) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat);
@@ -329,7 +328,7 @@ public class MainActivity extends AppCompatActivity{
             }
             textId = "0";
         }
-        if (catType == 0) {
+        if (catType == 1) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat1);
@@ -489,14 +488,12 @@ public class MainActivity extends AppCompatActivity{
         newSet.clone(layout);
 
 
-        String catType = (String) first.getText();
-        int catToAdd = Integer.parseInt(catType) + 1; //pass this into add
+        int catToAdd = Integer.parseInt(first.getText().toString()); //pass this into add
 
             if (type == 0) {
                 //top/middle
                 //remove destination tile
                 layout.removeView(first);
-                first.setVisibility(View.INVISIBLE);
                 //move tiles to destination tile
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
@@ -511,7 +508,7 @@ public class MainActivity extends AppCompatActivity{
                 //remove tile at destination and then add new cat tile
                 layout.removeView(second);
                 second.setVisibility(View.INVISIBLE);
-                addTile(catToAdd, 0, col);
+                addTile(catToAdd + 1, 0, col);
                 //update board state
                 board[1][col] = board[2][col];
                 board[2][col] = null;
