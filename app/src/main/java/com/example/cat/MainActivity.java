@@ -45,22 +45,7 @@ public class MainActivity extends AppCompatActivity{
         TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
         layout = findViewById(R.id.layout);
-        newSet.clone(layout);
 
-
-
-        //What to do with each button click
-        //
-        //Move all tiles in a direction in the array
-        //and check if the contentDescription are equal if so then make new tile where the two will go and "combine them"
-        //Make new ImageView tile (cat picture) and put in a blank square
-        //Add reference to that tile into the array for logical purposes
-        //Increment score by 9 everytime a combination occurs
-        //Display a new cat fact through API call to catfact thing everytime two squares combine
-        //Check if all tiles are full, if so then display end game score as a toast and reset board
-        //
-        //
-        //combining two tiles is basically just making one tile invisible and changing the text
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -316,6 +301,8 @@ public class MainActivity extends AppCompatActivity{
      * @param col which col to add to
      */
     void addTile(int catType, int row, int col) {
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
 
         Drawable drawableCat = null;
         ///Make a new Cat based off old cats
