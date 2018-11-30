@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(final View view) {
                 moveTiles(board, 1);
-                addTile(-1, 1,0);
 
 
             }
@@ -71,14 +70,6 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-    }
-
-    /**
-     * Checks if the game is over
-     * @return
-     */
-    boolean isGameOver() {
-        return false;
     }
 
     /**
@@ -190,7 +181,7 @@ public class MainActivity extends AppCompatActivity{
 
                     combineVertical(board[1][j], board[0][j], 6, j);
 
-                } else if (board[0][j] != null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
+                } else if (board[0][j] != null && board[1][j] != null && board[2][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
                     //something/middle/top
 
                     combineVertical(board[1][j], board[0][j], 7, j);
@@ -285,8 +276,30 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
+        int[] valid = validAdd();
+        if (valid == null) {
+
+            //DO SOMETHING INDICATING GAME IS OVER
+        } else {
+            addTile(-1, valid[0], valid[1]);
+        }
 
 
+
+
+    }
+    int[] validAdd() {
+        int[] valid = new int[2];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == null) {
+                    valid[0] = i;
+                    valid[1] = j;
+                    return valid;
+                }
+            }
+        }
+        return null;
 
     }
 
@@ -299,8 +312,11 @@ public class MainActivity extends AppCompatActivity{
     void addTile(int catType, int row, int col) {
         final ConstraintLayout layout = findViewById(R.id.layout);
         ConstraintSet newSet = new ConstraintSet();
+        newSet.clone(layout);
 
         Drawable drawableCat = null;
+
+        String textId = "";
         ///Make a new Cat based off old cats
         //ADD MORE CONDITIONS FOR MORE CATS
         Context mContext = getApplicationContext();
@@ -311,6 +327,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
+            textId = "0";
         }
         if (catType == 0) {
             drawableCat = ContextCompat.getDrawable(
@@ -319,11 +336,13 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
+            textId = "1";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
         newTile.setId(View.generateViewId());
         newTile.setCompoundDrawables(drawableCat, null, null, null);
+        newTile.setText(textId);
         newTile.setVisibility(View.INVISIBLE);
         newTile.setGravity(Gravity.CENTER);
 
@@ -467,6 +486,7 @@ public class MainActivity extends AppCompatActivity{
 
         final ConstraintLayout layout = findViewById(R.id.layout);
         ConstraintSet newSet = new ConstraintSet();
+        newSet.clone(layout);
 
 
         String catType = (String) first.getText();
