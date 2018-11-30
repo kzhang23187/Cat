@@ -1,6 +1,7 @@
 package com.example.cat;
 
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.constraint.ConstraintSet;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
                     continue;
                 }
                 //makes sure no null and then determine if equal or not
-                if (board[2][j] != null && board[1][j] != null && board[0][j].getText().equals(board[1][j].getText())) {
+                if (board[2][j] != null && board[1][j] != null && board[2][j].getText().equals(board[1][j].getText())) {
                     //bottom/middle
 
                     combineVertical(board[2][j], board[1][j], 4, j);
@@ -175,12 +176,12 @@ public class MainActivity extends AppCompatActivity{
 
                     combineVertical(board[2][j], board[0][j], 5, j);
 
-                } else if (board[0][j] == null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
+                } else if (board[2][j] == null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[0][j].getText())) {
                     //null/middle/top
 
                     combineVertical(board[1][j], board[0][j], 6, j);
 
-                } else if (board[0][j] != null && board[1][j] != null && board[2][j] != null && board[1][j].getText().equals(board[2][j].getText())) {
+                } else if (board[2][j] != null && board[1][j] != null && board[0][j] != null && board[1][j].getText().equals(board[0][j].getText())) {
                     //something/middle/top
 
                     combineVertical(board[1][j], board[0][j], 7, j);
@@ -275,30 +276,41 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
-        int[] valid = validAdd();
-        if (valid == null) {
+        ArrayList<Integer> valid = validAdd();
+        if (isGameOver()) {
 
             //DO SOMETHING INDICATING GAME IS OVER
         } else {
-            addTile(0, valid[0], valid[1]);
+            addTile(0, valid.get(0), valid.get(1));
         }
 
 
 
 
     }
-    int[] validAdd() {
-        int[] valid = new int[2];
+    boolean isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == null) {
-                    valid[0] = i;
-                    valid[1] = j;
-                    return valid;
+                if (board[i][j] != null && board[i][j].getText().equals("3")) {
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
+    }
+    ArrayList<Integer> validAdd() {
+        ArrayList<ArrayList<Integer>>  valid = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == null) {
+                    ArrayList<Integer> position = new ArrayList<>();
+                    position.add(i);
+                    position.add(j);
+                    valid.add(position);
+                }
+            }
+        }
+        return valid.get((int) (Math.random() * valid.size()));
 
     }
 
@@ -493,11 +505,10 @@ public class MainActivity extends AppCompatActivity{
             if (type == 0) {
                 //top/middle
                 //remove destination tile
-                layout.removeView(first);
                 //move tiles to destination tile
-                newSet.clear(second.getId(), ConstraintSet.TOP);
-                newSet.connect(second.getId(), ConstraintSet.TOP,
-                        R.id.guideline, ConstraintSet.BOTTOM);
+                //newSet.clear(second.getId(), ConstraintSet.TOP);
+                //newSet.connect(second.getId(), ConstraintSet.TOP,
+                //        R.id.guideline, ConstraintSet.BOTTOM);
 
                 if (board[2][col] != null) {
                     newSet.clear(board[2][col].getId(), ConstraintSet.TOP);
@@ -506,8 +517,10 @@ public class MainActivity extends AppCompatActivity{
                 }
 
                 //remove tile at destination and then add new cat tile
+
+                layout.removeView(first);
                 layout.removeView(second);
-                second.setVisibility(View.INVISIBLE);
+                //second.setVisibility(View.INVISIBLE);
                 addTile(catToAdd + 1, 0, col);
                 //update board state
                 board[1][col] = board[2][col];
@@ -517,13 +530,14 @@ public class MainActivity extends AppCompatActivity{
             } else if (type == 1) {
                 //top/null/bottom
                 //remove destination tile
-                layout.removeView(first);
                 //move tiles to destination tile
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
                         R.id.guideline, ConstraintSet.BOTTOM);
 
                 //remove tile at destination and then add new cat tile
+
+                layout.removeView(first);
                 layout.removeView(second);
                 addTile(catToAdd + 1, 0, col);
                 //update board state
@@ -554,15 +568,16 @@ public class MainActivity extends AppCompatActivity{
             } else if (type == 3) {
                 //something/middle/bottom
                 //move tiles to destination tile
-                layout.removeView(first);
 
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
                         R.id.guideline2, ConstraintSet.BOTTOM);
 
                 //remove tile at destination and then add new cat tile
+
+                layout.removeView(first);
                 layout.removeView(second);
-                addTile(catToAdd, 1, col);
+                addTile(catToAdd + 1, 1, col);
                 //update board state
                 board[2][col] = null;
                 //call update score;
@@ -570,10 +585,9 @@ public class MainActivity extends AppCompatActivity{
             } else if (type == 4) {
                 //bottom/middle
                 //move tiles to destination tile
-                layout.removeView(second);
 
-                newSet.clear(first.getId(), ConstraintSet.TOP);
-                newSet.connect(first.getId(), ConstraintSet.TOP,
+                newSet.clear(second.getId(), ConstraintSet.TOP);
+                newSet.connect(second.getId(), ConstraintSet.TOP,
                         R.id.guideline3, ConstraintSet.BOTTOM);
 
                 if (board[0][col] != null) {
@@ -583,9 +597,9 @@ public class MainActivity extends AppCompatActivity{
                 }
 
                 //remove tile at destination and then add new cat tile
-
                 layout.removeView(first);
-                addTile(catToAdd, 2, col);
+                layout.removeView(second);
+                addTile(catToAdd + 1, 2, col);
                 //update board state
                 board[1][col] = board[0][col];
                 board[0][col] = null;
@@ -594,15 +608,15 @@ public class MainActivity extends AppCompatActivity{
             } else if (type == 5) {
                 //bottom/null/top
                 //move tiles to destination tile
-                layout.removeView(first);
 
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
                         R.id.guideline3, ConstraintSet.BOTTOM);
 
                 //remove tile at destination and then add new cat tile
+                layout.removeView(first);
                 layout.removeView(second);
-                addTile(catToAdd, 2, col);
+                addTile(catToAdd + 1, 2, col);
 
                 //update board state
                 board[0][col] = null;
@@ -615,7 +629,7 @@ public class MainActivity extends AppCompatActivity{
 
                 newSet.clear(first.getId(), ConstraintSet.TOP);
                 newSet.connect(first.getId(), ConstraintSet.TOP,
-                        R.id.guideline3, ConstraintSet.BOTTOM);
+                        R.id.guideline5, ConstraintSet.BOTTOM);
 
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
@@ -624,7 +638,7 @@ public class MainActivity extends AppCompatActivity{
                 //remove tile at destination and then add new cat tile
                 layout.removeView(first);
                 layout.removeView(second);
-                addTile(catToAdd, 2, col);
+                addTile(catToAdd + 1, 2, col);
 
                 //update board state
                 board[0][col] = null;
@@ -635,14 +649,14 @@ public class MainActivity extends AppCompatActivity{
             } else {
                 //something/middle/top
                 //move tiles to destination tile
-                layout.removeView(first);
                 newSet.clear(second.getId(), ConstraintSet.TOP);
                 newSet.connect(second.getId(), ConstraintSet.TOP,
                         R.id.guideline2, ConstraintSet.BOTTOM);
 
                 //remove tile at destination and then add new cat tile
+                layout.removeView(first);
                 layout.removeView(second);
-                addTile(catToAdd, 1, col);
+                addTile(catToAdd + 1, 1, col);
 
                 //update board state
                 board[0][col] = null;
