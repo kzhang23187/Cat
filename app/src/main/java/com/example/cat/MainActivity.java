@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity{
 
         squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, r.getDisplayMetrics());
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
-        TextView first = findViewById(R.id.cat);
+        TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
 
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity{
 
             //DO SOMETHING INDICATING GAME IS OVER
         } else {
-            addTile(0, valid[0], valid[1]);
+            addTile(-1, valid[0], valid[1]);
         }
 
 
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity{
         ///Make a new Cat based off old cats
         //ADD MORE CONDITIONS FOR MORE CATS
         Context mContext = getApplicationContext();
-        if (catType == 0) {
+        if (catType == -1) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat);
@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity{
             }
             textId = "0";
         }
-        if (catType == 1) {
+        if (catType == 0) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
                     R.drawable.cat1);
@@ -350,6 +350,7 @@ public class MainActivity extends AppCompatActivity{
         newTile.setLayoutParams(lp);
         layout.addView(newTile);
 
+        newSet.clone(layout);
 
         //determines which position to add tile to
         if (row == 0) {
@@ -490,8 +491,6 @@ public class MainActivity extends AppCompatActivity{
 
         String catType = (String) first.getText();
         int catToAdd = Integer.parseInt(catType) + 1; //pass this into add
-
-        System.out.println(catType + " " + catToAdd);
 
             if (type == 0) {
                 //top/middle
