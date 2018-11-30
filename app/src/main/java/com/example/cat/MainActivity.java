@@ -27,10 +27,6 @@ public class MainActivity extends AppCompatActivity{
     private int squareSide;
     private int margin;
     private TextView[][] board = new TextView[3][3];
-    //copies the layout of the app
-    ConstraintLayout layout = null;
-    ConstraintSet newSet = new ConstraintSet();
-    ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +40,6 @@ public class MainActivity extends AppCompatActivity{
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
         TextView first = findViewById(R.id.cat1);
         board[1][1] = first;
-        layout = findViewById(R.id.layout);
 
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +96,7 @@ public class MainActivity extends AppCompatActivity{
     void moveTiles(TextView[][] board, int direction) {
 
         //1: up 2: down 3: right 4: left
+
 
         //if direction is up
         if (direction == 1) {
@@ -331,8 +327,11 @@ public class MainActivity extends AppCompatActivity{
         newTile.setVisibility(View.INVISIBLE);
         newTile.setGravity(Gravity.CENTER);
 
+        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(squareSide, squareSide);
         newTile.setLayoutParams(lp);
         layout.addView(newTile);
+
+        newSet.clone(layout);
 
         //determines which position to add tile to
         if (row == 0) {
@@ -465,6 +464,9 @@ public class MainActivity extends AppCompatActivity{
         //first determine what kind of cat it is by getText() and which cat to add into place
         //determine if it is the special case and execute that piece of code
         //otherwise put everything to bottom/top
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
 
 
         String catType = (String) first.getText();
@@ -647,6 +649,9 @@ public class MainActivity extends AppCompatActivity{
      * @param row which row is being combined (0: top, 1: middle, 2: bottom)
      */
     void combineHorizontal(TextView first, TextView second, int type, int row) {
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
         if (type == 0 || type == 1) {
 
         } else if (type == 2) {
@@ -667,6 +672,10 @@ public class MainActivity extends AppCompatActivity{
      * @param type 0: single element moving up 1: single element moving down. 2: top/bottom 3: middle/bottom
      */
     void moveVertical(TextView tile1, TextView tile2, int type) {
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
+        ConstraintSet newSet = new ConstraintSet();
+        newSet.clone(layout);
 
         if (type == 0) {
             //single tile going up
