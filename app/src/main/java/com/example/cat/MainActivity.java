@@ -1,11 +1,9 @@
 package com.example.cat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.constraint.ConstraintSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import 	android.util.TypedValue;
@@ -15,12 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
+import android.graphics.Color;
+import android.content.DialogInterface;
 import android.transition.Transition;
 import android.transition.AutoTransition;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.support.v4.view.MotionEventCompat;
-import android.view.View.OnTouchListener;
 
 import org.w3c.dom.Text;
 
@@ -70,13 +67,6 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-    }
-
-    /**
-     * resets the Board.
-     */
-    void resetBoard(){
-
     }
 
     /**
@@ -306,27 +296,119 @@ public class MainActivity extends AppCompatActivity{
         }
 
         ArrayList<Integer> valid = validAdd();
-        if (isGameOver()) {
 
-            //DO SOMETHING INDICATING GAME IS OVER
+        if (isGameOver() == 1) {
+            wonDialog();
         } else if (valid != null){
             addTile(0, valid.get(0), valid.get(1));
         }
+        if (isGameOver() == 2) {
+            lostDialog();
+        }
 
 
 
 
     }
-    boolean isGameOver() {
+
+    /**
+     * if player has won display this dialog
+     */
+    public void wonDialog() {
+//        final Dialog dialog = new Dialog(MainActivity.this); // Context, this, etc.
+//        dialog.setContentView(R.layout.game_end_dialogue);
+//        dialog.setTitle("GAME OVER");
+//        dialog.show();
+//        findViewById(R.id.dialog_ok).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View view) {
+//                resetBoard();
+//            }
+//        });
+        DialogUtils.showPopUp(this, "Game Over", "You've Won!", "", "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetBoard();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetBoard();
+            }
+        });
+
+    }
+
+    /**
+     * if player has lost game display this message
+     */
+    public void lostDialog() {
+        DialogUtils.showPopUp(this, "Game Over", "You've Lost", "", "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetBoard();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetBoard();
+            }
+        });
+
+    }
+
+    /**
+     * checks if player has won or lost
+     * @return
+     */
+    int isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null && board[i][j].getText().equals("999")) {
-                    return true;
+                if (board[i][j] != null && board[i][j].getText().equals("6")) {
+                    return 1;
                 }
             }
         }
-        return false;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length - 1; j++) {
+                if (board[i][j] == null || board[i][j + 1] == null) {
+                    return 0;
+                } else if (board[j][i] == null || board[j + 1][i] == null) {
+                    return 0;
+                } else if (board[i][j].getText().equals(board[i][j + 1].getText())) {
+                    return 0;
+                } else if (board[j][i].getText().equals(board[j + 1][i].getText())) {
+                    return 0;
+                }
+            }
+        }
+        return 2;
     }
+    /**
+     * resets the Board.
+     */
+    void resetBoard(){
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
+
+        //set elements of board to null
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null) {
+                    layout.removeView(board[i][j]);
+                    board[i][j] = null;
+                }
+            }
+        }
+
+
+
+    }
+
+    /**
+     * Determines an arraylist of coordinates for vcaild squares to add cats.
+     * @return
+     */
     ArrayList<Integer> validAdd() {
         ArrayList<ArrayList<Integer>>  valid = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
@@ -404,12 +486,29 @@ public class MainActivity extends AppCompatActivity{
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
             textId = "4";
+        } else if (catType == 5) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat5);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "5";
+        } else if (catType == 6) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat6);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "6";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
         newTile.setId(View.generateViewId());
         newTile.setCompoundDrawables(drawableCat, null, null, null);
         newTile.setText(textId);
+        newTile.setTextColor(getResources().getColor(R.color.colorAccent));
         newTile.setVisibility(View.INVISIBLE);
         newTile.setGravity(Gravity.CENTER);
 
@@ -534,6 +633,14 @@ public class MainActivity extends AppCompatActivity{
      * @param score
      */
     void updateScore(String score) {
+
+    }
+
+
+    /**
+     * Starts the api call to the cat fact thing and updates text box
+     */
+    void startAPICall() {
 
     }
 
@@ -922,13 +1029,6 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
-    /**
-     * Starts the api call to the cat fact thing and updates text box
-     */
-    void startAPICall() {
-
-    }
 
 
 
