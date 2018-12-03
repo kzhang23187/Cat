@@ -13,11 +13,14 @@ import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.content.DialogInterface;
 import android.transition.Transition;
 import android.transition.AutoTransition;
 import android.view.Gravity;
+import android.os.Handler;
 
 import org.w3c.dom.Text;
 
@@ -36,6 +39,11 @@ public class MainActivity extends AppCompatActivity{
 
         squareSide = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, r.getDisplayMetrics());
         margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
+
+        TextView highScore = findViewById(R.id.highScore);
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        int score = prefs.getInt("key", 0);
+        highScore.setText("" + score);
 
 
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity{
      * @param direction
      */
     void moveTiles(TextView[][] board, int direction) {
+
+        final ConstraintLayout layout = findViewById(R.id.layout);
 
         //1: up 2: down 3: right 4: left
 
@@ -295,15 +305,29 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
+        TransitionManager.beginDelayedTransition(layout);
+
         ArrayList<Integer> valid = validAdd();
 
+
         if (isGameOver() == 1) {
-            wonDialog();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    wonDialog();
+                }
+            }, 1500);
+
         } else if (valid != null){
             addTile(0, valid.get(0), valid.get(1));
         }
         if (isGameOver() == 2) {
-            lostDialog();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    lostDialog();
+                }
+            }, 1500);
         }
 
 
@@ -364,7 +388,7 @@ public class MainActivity extends AppCompatActivity{
     int isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null && board[i][j].getText().equals("6")) {
+                if (board[i][j] != null && board[i][j].getText().equals("9")) {
                     return 1;
                 }
             }
@@ -390,6 +414,8 @@ public class MainActivity extends AppCompatActivity{
     void resetBoard(){
 
         final ConstraintLayout layout = findViewById(R.id.layout);
+        TextView score = findViewById(R.id.score);
+        score.setText("0");
 
         //set elements of board to null
         for (int i = 0; i < board.length; i++) {
@@ -453,7 +479,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "0";
+            textId = "1";
         } else if (catType == 1) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -461,7 +487,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "1";
+            textId = "2";
         } else if (catType == 2) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -469,7 +495,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "2";
+            textId = "3";
         } else if (catType == 3) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -477,7 +503,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "3";
+            textId = "4";
         } else if (catType == 4) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -485,7 +511,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "4";
+            textId = "5";
         } else if (catType == 5) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -493,7 +519,7 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "5";
+            textId = "6";
         } else if (catType == 6) {
             drawableCat = ContextCompat.getDrawable(
                     mContext,
@@ -501,14 +527,30 @@ public class MainActivity extends AppCompatActivity{
             if (drawableCat != null) {
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
-            textId = "6";
+            textId = "7";
+        } else if (catType == 7) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat7);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "8";
+        } else if (catType == 8) {
+            drawableCat = ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.cat8);
+            if (drawableCat != null) {
+                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
+            }
+            textId = "9";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
         newTile.setId(View.generateViewId());
         newTile.setCompoundDrawables(drawableCat, null, null, null);
         newTile.setText(textId);
-        newTile.setTextColor(getResources().getColor(R.color.colorAccent));
+        newTile.setTextSize(0);
         newTile.setVisibility(View.INVISIBLE);
         newTile.setGravity(Gravity.CENTER);
 
@@ -632,9 +674,34 @@ public class MainActivity extends AppCompatActivity{
      * Updates the textView for score
      * @param score
      */
-    void updateScore(String score) {
+    void updateScore(int score) {
+        TextView currentScore = findViewById(R.id.score);
+        int newScore = Integer.parseInt(currentScore.getText().toString()) + score;
+        currentScore.setText("" + newScore);
+        TextView highScore = findViewById(R.id.highScore);
+        int hScore = Integer.parseInt(highScore.getText().toString());
+        if (newScore > hScore) {
+            updateHighScore(newScore);
+
+        }
 
     }
+    /**
+     * updates high score
+     */
+    void updateHighScore(int score) {
+        TextView highScore = findViewById(R.id.highScore);
+        highScore.setText("" + score);
+        //UPDATE GLOBAL HIGH SCORE SO IT REMEMBERS NEXT TIME INCLUDE IN ONCREATE so it loads next time
+
+        //Setting high score
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        Editor editor = prefs.edit();
+        editor.putInt("key", score);
+        editor.commit();
+
+    }
+
 
 
     /**
@@ -664,6 +731,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         int catToAdd = Integer.parseInt(first.getText().toString()); //pass this into add
+        int score = 3 * 2 * catToAdd;
+        updateScore(score);
 
         if (type == 0) {
             //top/middle
@@ -679,7 +748,7 @@ public class MainActivity extends AppCompatActivity{
             layout.removeView(first);
             layout.removeView(second);
             //second.setVisibility(View.INVISIBLE);
-            addTile(catToAdd + 1, 0, col);
+            addTile(catToAdd, 0, col);
             //update board state
             board[1][col] = board[2][col];
             board[2][col] = null;
@@ -689,7 +758,7 @@ public class MainActivity extends AppCompatActivity{
 
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 0, col);
+            addTile(catToAdd, 0, col);
             //update board state
             board[2][col] = null;
 
@@ -699,7 +768,7 @@ public class MainActivity extends AppCompatActivity{
             //move tiles to destination tile
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 0, col);
+            addTile(catToAdd, 0, col);
             //update board state
             board[1][col] = null;
             board[2][col] = null;
@@ -709,7 +778,7 @@ public class MainActivity extends AppCompatActivity{
 
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 1, col);
+            addTile(catToAdd, 1, col);
             //update board state
             board[2][col] = null;
 
@@ -725,7 +794,7 @@ public class MainActivity extends AppCompatActivity{
             //remove tile at destination and then add new cat tile
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 2, col);
+            addTile(catToAdd, 2, col);
             //update board state
             board[1][col] = board[0][col];
             board[0][col] = null;
@@ -734,7 +803,7 @@ public class MainActivity extends AppCompatActivity{
             //bottom/null/top
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 2, col);
+            addTile(catToAdd, 2, col);
 
             //update board state
             board[0][col] = null;
@@ -744,7 +813,7 @@ public class MainActivity extends AppCompatActivity{
             //null/middle/top
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 2, col);
+            addTile(catToAdd, 2, col);
 
             //update board state
             board[0][col] = null;
@@ -755,15 +824,14 @@ public class MainActivity extends AppCompatActivity{
             //something/middle/top
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, 1, col);
+            addTile(catToAdd, 1, col);
 
             //update board state
             board[0][col] = null;
 
 
         }
-        //CALL UPDATE SCORE HERE AFTER THE COMBINATIONS AND STILL HAVE THE CAT TYPE
-        TransitionManager.beginDelayedTransition(layout);
+        //TransitionManager.beginDelayedTransition(layout);
 
         newSet.applyTo(layout);
     }
@@ -779,12 +847,15 @@ public class MainActivity extends AppCompatActivity{
      */
     void combineHorizontal(TextView first, TextView second, int type, int row) {
 
+
         final ConstraintLayout layout = findViewById(R.id.layout);
         ConstraintSet newSet = new ConstraintSet();
         newSet.clone(layout);
 
 
         int catToAdd = Integer.parseInt(first.getText().toString());
+        int score = 3 * 2 * catToAdd;
+        updateScore(score);
 
         if (type == 0) {
             //right/middle
@@ -795,7 +866,7 @@ public class MainActivity extends AppCompatActivity{
             }
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 0);
+            addTile(catToAdd, row, 0);
 
             board[row][1] = board[row][2];
             board[row][2] = null;
@@ -805,14 +876,14 @@ public class MainActivity extends AppCompatActivity{
             //right/null/left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 0);
+            addTile(catToAdd, row, 0);
             board[row][2] = null;
 
         } else if (type == 2) {
             //null/middle/left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 0);
+            addTile(catToAdd, row, 0);
             board[row][1] = null;
             board[row][2] = null;
 
@@ -820,7 +891,7 @@ public class MainActivity extends AppCompatActivity{
             //something/middle/left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 1);
+            addTile(catToAdd, row, 1);
             board[row][2] = null;
 
         } else if (type == 4) {
@@ -832,7 +903,7 @@ public class MainActivity extends AppCompatActivity{
             }
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 2);
+            addTile(catToAdd, row, 2);
 
             board[row][1] = board[row][0];
             board[row][0] = null;
@@ -842,14 +913,14 @@ public class MainActivity extends AppCompatActivity{
             //right/null/left combining left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 2);
+            addTile(catToAdd, row, 2);
             board[row][0] = null;
 
         } else if (type == 6) {
             //right/middle/null combining left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 2);
+            addTile(catToAdd, row, 2);
             board[row][0] = null;
             board[row][1] = null;
 
@@ -858,11 +929,11 @@ public class MainActivity extends AppCompatActivity{
             //right/middle/something combining left
             layout.removeView(first);
             layout.removeView(second);
-            addTile(catToAdd + 1, row, 1);
+            addTile(catToAdd, row, 1);
             board[row][0] = null;
 
         }
-        TransitionManager.beginDelayedTransition(layout);
+        //TransitionManager.beginDelayedTransition(layout);
 
         newSet.applyTo(layout);
 
@@ -941,7 +1012,7 @@ public class MainActivity extends AppCompatActivity{
             board[0][col] = null;
 
         }
-        TransitionManager.beginDelayedTransition(layout);
+        //TransitionManager.beginDelayedTransition(layout);
         newSet.applyTo(layout);
 
         }
@@ -1002,8 +1073,7 @@ public class MainActivity extends AppCompatActivity{
             newSet.clear(tile1.getId(), ConstraintSet.START);
             newSet.connect(tile1.getId(), ConstraintSet.START,
                     R.id.guideline6, ConstraintSet.END);
-            board[row][2] = tile1;
-            board[row][1] = null;
+            board[row][1] = tile1;
             board[row][0] = null;
 
 
@@ -1023,7 +1093,7 @@ public class MainActivity extends AppCompatActivity{
 
         }
 
-        TransitionManager.beginDelayedTransition(layout);
+        //TransitionManager.beginDelayedTransition(layout);
         newSet.applyTo(layout);
 
 

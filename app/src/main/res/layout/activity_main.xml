@@ -8,29 +8,72 @@
     android:background="@color/colorAccent"
     tools:context=".MainActivity">
 
+
     <View
         android:id="@+id/divider5"
-        android:layout_width="5dp"
-        android:layout_height="366dp"
+        android:layout_width="4dp"
+        android:layout_height="375dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <View
         android:id="@+id/divider3"
-        android:layout_width="5dp"
-        android:layout_height="366dp"
+        android:layout_width="4dp"
+        android:layout_height="375dp"
         android:background="@color/colorPrimaryDark"
-        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="4dp"
+        android:layout_height="375dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="5dp"
-        android:layout_height="366dp"
+        android:layout_width="4dp"
+        android:layout_height="375dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="392dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="392dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/divider8"
+        android:layout_width="392dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/divider9"
+        android:layout_width="390dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/up"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/left"
@@ -43,9 +86,9 @@
 
     <TextView
         android:id="@+id/catFact"
-        android:layout_width="219dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="48dp"
+        android:layout_width="226dp"
+        android:layout_height="71dp"
+        android:layout_marginBottom="11dp"
         android:background="@color/colorPrimaryDark"
         android:text="CAT FACTS!!!!"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -63,21 +106,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="211dp" />
+        app:layout_constraintGuide_begin="219dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="337dp" />
+        app:layout_constraintGuide_begin="344dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="461dp" />
+        app:layout_constraintGuide_begin="469dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
@@ -91,21 +134,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="136dp" />
+        app:layout_constraintGuide_begin="139dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="272dp" />
+        app:layout_constraintGuide_begin="269dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="395dp" />
+        app:layout_constraintGuide_begin="399dp" />
 
     <Button
         android:id="@+id/down"
@@ -141,7 +184,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/scoreLabel"
         android:layout_width="150dp"
         android:layout_height="37dp"
         android:layout_marginEnd="8dp"
@@ -162,6 +205,7 @@
         android:background="@color/colorPrimary"
         android:fontFamily="casual"
         android:text="HIGH SCORE:"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/guideline8" />
@@ -173,20 +217,25 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="587dp" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="5dp"
-        android:layout_height="366dp"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="24dp"
+        android:text="0"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="5dp"
-        android:layout_height="366dp"
-        android:background="@color/colorPrimaryDark"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+    <TextView
+        android:id="@+id/highScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="64dp"
+        android:text="0"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline7" />
+
 
 </android.support.constraint.ConstraintLayout>
