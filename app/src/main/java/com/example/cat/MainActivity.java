@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity{
     int isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null && board[i][j].getText().equals("9")) {
+                if (board[i][j] != null && board[i][j].getText().equals("7")) {
                     return 1;
                 }
             }
@@ -528,22 +528,6 @@ public class MainActivity extends AppCompatActivity{
                 drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
             }
             textId = "7";
-        } else if (catType == 7) {
-            drawableCat = ContextCompat.getDrawable(
-                    mContext,
-                    R.drawable.cat7);
-            if (drawableCat != null) {
-                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
-            }
-            textId = "8";
-        } else if (catType == 8) {
-            drawableCat = ContextCompat.getDrawable(
-                    mContext,
-                    R.drawable.cat8);
-            if (drawableCat != null) {
-                drawableCat.setBounds(0, 0, drawableCat.getIntrinsicWidth(), drawableCat.getIntrinsicHeight());
-            }
-            textId = "9";
         }
         //make new tile
         TextView newTile = new TextView(layout.getContext());
