@@ -11,9 +11,11 @@
 
     <Button
         android:id="@+id/left"
-        android:layout_width="76dp"
-        android:layout_height="120dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/roundedbutton"
         android:text="L"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/guideline6" />
@@ -91,6 +93,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="D"
+        android:background="@drawable/roundedbutton"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintHorizontal_bias="0.562"
@@ -98,9 +101,11 @@
 
     <Button
         android:id="@+id/right"
-        android:layout_width="76dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/roundedbutton"
         android:text="R"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintStart_toStartOf="@+id/guideline7" />
@@ -111,9 +116,9 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/roundedbutton"
         android:text="UP"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
