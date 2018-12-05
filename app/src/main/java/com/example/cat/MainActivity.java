@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.Intent;
 import android.Manifest.permission;
 import android.graphics.Color;
 import android.content.DialogInterface;
@@ -317,23 +318,27 @@ public class MainActivity extends AppCompatActivity{
 
 
         if (isGameOver() == 1) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    wonDialog();
-                }
-            }, 1500);
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                public void run() {
+//                    wonDialog();
+//                }
+//            }, 1500);
+            Intent intent=new Intent(MainActivity.this,GameOver.class);
+            startActivityForResult(intent, 1);
 
         } else if (valid != null){
             addTile(0, valid.get(0), valid.get(1));
         }
         if (isGameOver() == 2) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    lostDialog();
-                }
-            }, 1500);
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                public void run() {
+//                    lostDialog();
+//                }
+//            }, 1500);
+            Intent intent=new Intent(MainActivity.this,GameOver.class);
+            startActivityForResult(intent, 2);
         }
 
 
