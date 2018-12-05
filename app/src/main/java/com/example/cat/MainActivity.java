@@ -15,12 +15,15 @@ import android.support.v4.content.ContextCompat;
 import android.transition.TransitionManager;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.Manifest.permission;
 import android.graphics.Color;
 import android.content.DialogInterface;
 import android.transition.Transition;
 import android.transition.AutoTransition;
 import android.view.Gravity;
 import android.os.Handler;
+import android.app.DownloadManager.Request;
+import org.json.JSONObject;
 
 import org.w3c.dom.Text;
 
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
         int score = prefs.getInt("key", 0);
         highScore.setText("" + score);
+
+        TextView catFact = findViewById(R.id.catFact);
+
 
 
         findViewById(R.id.up).setOnClickListener(new View.OnClickListener() {
