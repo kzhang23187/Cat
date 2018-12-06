@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     private int squareSide;
     private int margin;
     private TextView[][] board = new TextView[3][3];
+    private String finalCat = "7";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,13 +338,23 @@ public class MainActivity extends AppCompatActivity{
 //                    lostDialog();
 //                }
 //            }, 1500);
-            Intent intent=new Intent(MainActivity.this,GameOver.class);
+            Intent intent=new Intent(MainActivity.this,GameWon.class);
             startActivityForResult(intent, 2);
         }
 
 
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            resetBoard();
+        } else {
+            finalCat = "-1";
+        }
     }
 
     /**
@@ -399,8 +410,8 @@ public class MainActivity extends AppCompatActivity{
     int isGameOver() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                if (board[i][j] != null && board[i][j].getText().equals("7")) {
-                    return 1;
+                if (board[i][j] != null && board[i][j].getText().equals(finalCat)) {
+                    return 2;
                 }
             }
         }
@@ -417,7 +428,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         }
-        return 2;
+        return 1;
     }
     /**
      * resets the Board.
