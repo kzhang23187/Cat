@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.constraint.ConstraintSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import 	android.util.TypedValue;
@@ -317,7 +318,9 @@ public class MainActivity extends AppCompatActivity{
 
         ArrayList<Integer> valid = validAdd();
 
-
+        if (valid != null){
+            addTile(0, valid.get(0), valid.get(1));
+        }
         if (isGameOver() == 1) {
             Intent intent = new Intent(MainActivity.this,GameOver.class);
             startActivityForResult(intent, 1);
@@ -325,8 +328,6 @@ public class MainActivity extends AppCompatActivity{
         } else if (isGameOver() == 2) {
             Intent intent = new Intent(MainActivity.this,GameWon.class);
             startActivityForResult(intent, 2);
-        }  else if (valid != null){
-            addTile(0, valid.get(0), valid.get(1));
         }
 
 
