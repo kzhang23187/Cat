@@ -15,7 +15,7 @@ public class GameWon extends AppCompatActivity {
             @Override
             public void onClick(View args) {
                 Intent intent = new Intent();
-                setResult(2,intent);
+                setResult(1,intent);
                 finish();
             }
         });

@@ -13,7 +13,7 @@ public class GameOver extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View args) {
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 setResult(1,intent);
                 finish();
 

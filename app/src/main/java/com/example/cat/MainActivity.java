@@ -319,27 +319,14 @@ public class MainActivity extends AppCompatActivity{
 
 
         if (isGameOver() == 1) {
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                public void run() {
-//                    wonDialog();
-//                }
-//            }, 1500);
-            Intent intent=new Intent(MainActivity.this,GameOver.class);
+            Intent intent = new Intent(MainActivity.this,GameOver.class);
             startActivityForResult(intent, 1);
 
-        } else if (valid != null){
-            addTile(0, valid.get(0), valid.get(1));
-        }
-        if (isGameOver() == 2) {
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                public void run() {
-//                    lostDialog();
-//                }
-//            }, 1500);
-            Intent intent=new Intent(MainActivity.this,GameWon.class);
+        } else if (isGameOver() == 2) {
+            Intent intent = new Intent(MainActivity.this,GameWon.class);
             startActivityForResult(intent, 2);
+        }  else if (valid != null){
+            addTile(0, valid.get(0), valid.get(1));
         }
 
 
@@ -352,8 +339,12 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             resetBoard();
-        } else {
-            finalCat = "-1";
+        } else if (requestCode == 2){
+            if (resultCode == 1) {
+                resetBoard();
+            } else {
+                finalCat = "-1";
+            }
         }
     }
 
