@@ -696,7 +696,7 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onErrorResponse(final VolleyError error) {
                         // If there a HTTP error then add a note to our repo list.
-                        catFact.setText("Error while calling REST API");
+                        catFact.setText("Connect to the internet for interesting cat facts!");
                         Log.e("Volley", error.toString());
                     }
                 }
