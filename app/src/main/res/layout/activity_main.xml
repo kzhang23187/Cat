@@ -22,12 +22,14 @@
 
     <TextView
         android:id="@+id/catFact"
-        android:layout_width="218dp"
-        android:layout_height="82dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_width="220dp"
+        android:layout_height="89dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/roundedcorners"
+        android:gravity="center_vertical"
         android:text="CAT FACTS!!!!"
         android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="parent" />
