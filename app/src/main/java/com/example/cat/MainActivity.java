@@ -17,16 +17,15 @@ import android.transition.TransitionManager;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.Intent;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
+
 import android.Manifest.permission;
 import android.graphics.Color;
 import android.content.DialogInterface;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity{
     private int margin;
     private TextView[][] board = new TextView[3][3];
     private String finalCat = "7";
+
     //for API CAll
     RequestQueue requestQueue;
     String url ="https://catfact.ninja/fact";
@@ -675,7 +675,9 @@ public class MainActivity extends AppCompatActivity{
      */
     private void startAPICall() {
         final TextView catFact = findViewById(R.id.catFact);
+
         requestQueue = Volley.newRequestQueue(this);
+
         JsonObjectRequest arrReq = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -699,8 +701,7 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
         );
-        // Add the request we just defined to our request queue.
-        // The request queue will automatically handle the request as soon as it can.
+
         requestQueue.add(arrReq);
     }
 
