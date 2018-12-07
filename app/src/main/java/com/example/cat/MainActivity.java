@@ -17,6 +17,16 @@ import android.transition.TransitionManager;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.Intent;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 import android.Manifest.permission;
 import android.graphics.Color;
 import android.content.DialogInterface;
@@ -34,11 +44,17 @@ public class MainActivity extends AppCompatActivity{
     private int margin;
     private TextView[][] board = new TextView[3][3];
     private String finalCat = "7";
+    //for API CAll
+    RequestQueue requestQueue;
+    String url ="https://catfact.ninja/fact";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestQueue = Volley.newRequestQueue(this);
+        startAPICall();
 
 
         Resources r = getResources();
@@ -350,52 +366,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * if player has won display this dialog
-     */
-    public void wonDialog() {
-//        final Dialog dialog = new Dialog(MainActivity.this); // Context, this, etc.
-//        dialog.setContentView(R.layout.game_end_dialogue);
-//        dialog.setTitle("GAME OVER");
-//        dialog.show();
-//        findViewById(R.id.dialog_ok).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(final View view) {
-//                resetBoard();
-//            }
-//        });
-        DialogUtils.showPopUp(this, "Game Over", "You've Won!", "", "Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resetBoard();
-            }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resetBoard();
-            }
-        });
-
-    }
-
-    /**
-     * if player has lost game display this message
-     */
-    public void lostDialog() {
-        DialogUtils.showPopUp(this, "Game Over", "You've Lost", "", "Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resetBoard();
-            }
-        }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resetBoard();
-            }
-        });
-
-    }
-
-    /**
      * checks if player has won or lost
      * @return
      */
@@ -700,13 +670,38 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
-
     /**
-     * Starts the api call to the cat fact thing and updates text box
+     * Makes API Call to Cat website
      */
-    void startAPICall() {
+    private void startAPICall() {
+        final TextView catFact = findViewById(R.id.catFact);
+        requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest arrReq = new JsonObjectRequest(com.android.volley.Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(final JSONObject response) {
+                                try {
+                                    // For each repo, add a new line to our repo list.
+                                    catFact.setText(response.get("fact").toString());
+                                } catch (JSONException e) {
+                                    // If there is an error then output this to the logs.
+                                    Log.e("Volley", "Invalid JSON Object.");
+                                }
+                    }
+                },
 
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(final VolleyError error) {
+                        // If there a HTTP error then add a note to our repo list.
+                        catFact.setText("Error while calling REST API");
+                        Log.e("Volley", error.toString());
+                    }
+                }
+        );
+        // Add the request we just defined to our request queue.
+        // The request queue will automatically handle the request as soon as it can.
+        requestQueue.add(arrReq);
     }
 
     /**
