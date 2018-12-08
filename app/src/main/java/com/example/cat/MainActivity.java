@@ -7,7 +7,7 @@ import android.support.constraint.ConstraintSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import 	android.util.TypedValue;
+import android.util.TypedValue;
 import android.content.res.Resources;
 import android.support.constraint.ConstraintLayout;
 import android.graphics.drawable.Drawable;
@@ -26,17 +26,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import android.Manifest.permission;
-import android.graphics.Color;
-import android.content.DialogInterface;
-import android.transition.Transition;
-import android.transition.AutoTransition;
 import android.view.Gravity;
-import android.os.Handler;
-import android.app.DownloadManager.Request;
-import org.json.JSONObject;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity{
     private int squareSide;
@@ -46,7 +36,7 @@ public class MainActivity extends AppCompatActivity{
 
     //for API CAll
     RequestQueue requestQueue;
-    String url ="https://catfact.ninja/fact";
+    String url ="https://catfact.ninja/fact?max_length=150";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,9 +340,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             resetBoard();
@@ -363,8 +353,8 @@ public class MainActivity extends AppCompatActivity{
                 finalCat = "-1";
             }
         }
+        startAPICall();
     }
-
     /**
      * checks if player has won or lost
      * @return
@@ -414,7 +404,6 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
-
     /**
      * Determines an arraylist of coordinates for vcaild squares to add cats.
      * @return
@@ -438,7 +427,6 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
-
     /**
      * Adds a new tile to the board array and into activity main. Called by combine methods
      * @param catType the type of cat to add
@@ -637,7 +625,6 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
-
     /**
      * Updates the textView for score
      * @param score
@@ -669,11 +656,10 @@ public class MainActivity extends AppCompatActivity{
         editor.commit();
 
     }
-
     /**
      * Makes API Call to Cat website
      */
-    private void startAPICall() {
+    void startAPICall() {
         final TextView catFact = findViewById(R.id.catFact);
 
         requestQueue = Volley.newRequestQueue(this);
@@ -704,7 +690,6 @@ public class MainActivity extends AppCompatActivity{
 
         requestQueue.add(arrReq);
     }
-
     /**
      * handles the different types of vertical combinations. and calls updateScore
      * special case for middle/bottom and middle/top (if there is a tile above/below that is present
@@ -829,7 +814,6 @@ public class MainActivity extends AppCompatActivity{
 
         newSet.applyTo(layout);
     }
-
     /**
      * handles the different types of horizontal combinations.
      * 0(right/middle), 1(right/left), 2(middle/left) are for right
@@ -932,7 +916,6 @@ public class MainActivity extends AppCompatActivity{
         newSet.applyTo(layout);
 
     }
-
     /**
      * if columns has no equal tiles then just move
      *
@@ -1010,8 +993,6 @@ public class MainActivity extends AppCompatActivity{
         newSet.applyTo(layout);
 
         }
-
-
     /**
      * if rows has no equal tiles then just move
      * @param tile1
@@ -1092,10 +1073,4 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
-
-
-
-
-
-
 }
